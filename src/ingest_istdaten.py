@@ -71,19 +71,20 @@ CKAN_PACKAGE_URL = (
     "https://data.opentransportdata.swiss/api/3/action/package_show?id=ist-daten-v2"
 )
 
-# Monatsarchiv fuer aeltere Tage. ACHTUNG: Muster noch nicht verifiziert, weil
-# die Domain aus der Cloud-Umgebung noch gesperrt ist. Nach der ersten Pruefung
-# des Archivs (https://archive.opentransportdata.swiss/actual_data_archive.htm)
-# anpassen oder per --archive-template uebergeben.
+# Monatsarchiv (geprueft am 20.10.2026 auf
+# https://archive.opentransportdata.swiss/actual_data_archive.htm): v2 gibt es ab
+# Juli 2025 als ein Zip pro Monat (ca. 1.3 bis 1.4 GB) mit einer CSV pro Tag.
 DEFAULT_ARCHIVE_TEMPLATE = (
-    "https://archive.opentransportdata.swiss/istdaten/{year}/ist-daten-{year}-{month:02d}.zip"
+    "https://archive.opentransportdata.swiss/istdaten/{year}/ist-daten-v2-{year}-{month:02d}.zip"
 )
 
 # Dateiname der Tagesdatei, wie er in der CKAN-Liste vorkommt (z. B. 2026-02-28_IstDaten.csv)
 DAILY_FILE_PATTERN = "{d}_IstDaten.csv"
 
-# Nur diese Produkte (Verkehrsmittel) werden behalten
-PRODUKTE = ("Zug", "Bus")
+# Nur diese Produkte werden behalten, Vergleich in Grossbuchstaben, weil die Daten
+# sowohl 'Bus' als auch 'BUS' enthalten. Zahnradbahnen (z. B. Rorschach-Heiden)
+# zaehlen zur Bahn. Zuordnung zur Gruppe Bahn/Bus fuer Hypothese H2:
+PRODUKT_GRUPPE = {"ZUG": "Bahn", "ZAHNRADBAHN": "Bahn", "BUS": "Bus"}
 
 # Spalten, die das Skript zwingend braucht (Namen laut Datensatz-Dokumentation).
 # Fehlt eine, bricht der Tag mit einer klaren Fehlermeldung ab.
@@ -92,13 +93,22 @@ REQUIRED_COLUMNS = [
     "LINIEN_ID", "LINIEN_TEXT", "VERKEHRSMITTEL_TEXT", "ZUSATZFAHRT_TF",
     "FAELLT_AUS_TF", "BPUIC", "HALTESTELLEN_NAME", "ANKUNFTSZEIT",
     "AN_PROGNOSE", "AN_PROGNOSE_STATUS", "ABFAHRTSZEIT", "AB_PROGNOSE",
-    "AB_PROGNOSE_STATUS", "DURCHFAHRT_TF",
+    "AB_PROGNOSE_STATUS", "DURCHFAHRT_TF", "SLOID",
 ]
 
 # Zeitformate in den Ist-Daten: Soll-Zeiten ohne Sekunden, Prognosen mit Sekunden.
 # Zur Sicherheit werden beide Formate (und ISO) fuer alle Zeitspalten versucht.
 TS_FORMATS = "['%d.%m.%Y %H:%M:%S', '%d.%m.%Y %H:%M', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M']"
 DATE_FORMATS = "['%d.%m.%Y', '%Y-%m-%d']"
+
+# 7-stellige Haltestellennummer aus BPUIC: In v2 ist BPUIC oft 9-stellig
+# (Haltestelle + 2 Ziffern Kante/Gleis, z. B. 850978002 -> 8509780).
+STOP_KEY = "CASE WHEN length(BPUIC) = 9 THEN left(BPUIC, 7) ELSE BPUIC END"
+
+# Rangfolge, falls derselbe Halt doppelt geliefert wird (ca. 1900 Zeilen pro Tag,
+# einmal ohne und einmal mit Prognose): die Zeile mit der besten Information gewinnt.
+STATUS_RANG = """CASE AB_PROGNOSE_STATUS WHEN 'REAL' THEN 1 WHEN 'GESCHAETZT' THEN 2
+    WHEN 'PROGNOSE' THEN 3 WHEN 'UNBEKANNT' THEN 4 ELSE 5 END"""
 
 log = logging.getLogger("ingest_istdaten")
 
@@ -166,6 +176,7 @@ def fetch_day(d: date, input_dir: Path | None, download_dir: Path, archive_templ
 
     Reihenfolge: lokale Datei -> Tagesdatei aus CKAN -> Monats-Zip aus dem Archiv.
     """
+    global _ckan_cache
     name = DAILY_FILE_PATTERN.format(d=d.isoformat())
     for folder in filter(None, (input_dir, download_dir)):
         if (folder / name).exists():
@@ -177,7 +188,8 @@ def fetch_day(d: date, input_dir: Path | None, download_dir: Path, archive_templ
         if name in urls:
             return download(urls[name], download_dir / name)
     except OSError as exc:
-        log.warning("CKAN-Abfrage fehlgeschlagen: %s", exc)
+        _ckan_cache = {}  # nicht fuer jeden Tag erneut versuchen
+        log.warning("CKAN-Abfrage fehlgeschlagen, nutze Archiv: %s", exc)
 
     # 2) Monatsarchiv: Zip einmal pro Monat laden, gesuchten Tag entpacken
     zip_url = archive_template.format(year=d.year, month=d.month)
@@ -229,11 +241,12 @@ def process_day(con, d: date, args, stop_filter: bool) -> None:
     src = csv_source(raw_path)
     check_columns(con, src)
 
-    # Filterbedingung: Bahn/Bus und optional Haltestellen der Ostschweiz
-    produkte = ", ".join(f"'{p}'" for p in PRODUKTE)
-    where = f"PRODUKT_ID IN ({produkte})"
+    # Filterbedingung: Bahn/Bus und optional Haltestellen der Ostschweiz.
+    # Verglichen wird die 7-stellige Haltestellennummer (siehe STOP_KEY).
+    produkte = ", ".join(f"'{p}'" for p in PRODUKT_GRUPPE)
+    where = f"upper(PRODUKT_ID) IN ({produkte})"
     if stop_filter:
-        where += " AND BPUIC IN (SELECT bpuic FROM stops_filter)"
+        where += f" AND {STOP_KEY} IN (SELECT bpuic FROM stops_filter)"
 
     # Gefilterte Rohdaten unveraendert (alle Spalten als Text) ablegen
     args.raw_dir.mkdir(parents=True, exist_ok=True)
@@ -252,13 +265,28 @@ def process_day(con, d: date, args, stop_filter: bool) -> None:
         con.execute("DELETE FROM halt WHERE betriebstag = ?", [d])
         con.execute(f"""
             INSERT INTO halt
+            WITH dedup AS (
+                -- 1) exakte Doppel (gleiche Fahrt, Kante und Soll-Zeiten) entfernen
+                SELECT * FROM {fsrc}
+                QUALIFY row_number() OVER (
+                    PARTITION BY BETRIEBSTAG, FAHRT_BEZEICHNER, BPUIC, ANKUNFTSZEIT, ABFAHRTSZEIT
+                    ORDER BY {STATUS_RANG}) = 1
+            )
             SELECT
                 try_strptime(BETRIEBSTAG, {DATE_FORMATS})::DATE,
                 FAHRT_BEZEICHNER,
                 BPUIC,
+                -- 2) laufende Nummer, falls die Fahrt die Kante mehrmals anfaehrt
+                row_number() OVER (
+                    PARTITION BY BETRIEBSTAG, FAHRT_BEZEICHNER, BPUIC
+                    ORDER BY coalesce(ANKUNFTSZEIT, ABFAHRTSZEIT)) AS halt_nr,
+                {STOP_KEY},
+                NULLIF(SLOID, ''),
                 HALTESTELLEN_NAME,
                 BETREIBER_ABK,
-                PRODUKT_ID,
+                -- 'BUS' und 'Bus' vereinheitlichen
+                CASE upper(PRODUKT_ID) WHEN 'BUS' THEN 'Bus' ELSE PRODUKT_ID END,
+                CASE WHEN upper(PRODUKT_ID) = 'BUS' THEN 'Bus' ELSE 'Bahn' END,
                 VERKEHRSMITTEL_TEXT,
                 LINIEN_ID,
                 LINIEN_TEXT,
@@ -275,9 +303,7 @@ def process_day(con, d: date, args, stop_filter: bool) -> None:
                 epoch(an_ist - an_soll) / 60.0,
                 epoch(ab_ist - ab_soll) / 60.0,
                 '{raw_path.name}'
-            FROM {fsrc}
-            -- Doppelte Halte (gleiche Fahrt, gleiche Haltestelle) nur einmal uebernehmen
-            QUALIFY row_number() OVER (PARTITION BY BETRIEBSTAG, FAHRT_BEZEICHNER, BPUIC) = 1
+            FROM dedup
         """)
         rows_loaded = con.execute("SELECT count(*) FROM halt WHERE betriebstag = ?", [d]).fetchone()[0]
         con.execute(
@@ -328,7 +354,9 @@ def main() -> None:
     if stop_filter:
         con.execute(
             "CREATE OR REPLACE TEMP TABLE stops_filter AS "
-            f"SELECT DISTINCT CAST(bpuic AS VARCHAR) AS bpuic FROM read_csv('{args.stops.as_posix()}', header=true)"
+            # nur die ersten 7 Ziffern, falls C 9-stellige Nummern liefert
+            "SELECT DISTINCT left(CAST(bpuic AS VARCHAR), 7) AS bpuic "
+            f"FROM read_csv('{args.stops.as_posix()}', header=true)"
         )
         log.info("Haltestellenfilter: %d Haltestellen", con.execute("SELECT count(*) FROM stops_filter").fetchone()[0])
 

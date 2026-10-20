@@ -10,11 +10,11 @@ Bitte bestaetigen oder Aenderungen hier eintragen. Massgeblich ist danach `src/s
 
 ## Namen
 - Tabellen und Spalten klein, Deutsch, `snake_case`, keine Umlaute (`verspaetung`, nicht `Verspätung`).
-- Haltestellen-ID heisst ueberall `bpuic` (Text, weil v2 auch SLOIDs enthaelt).
+- Haltestellen-ID: In den Ist-Daten ist `BPUIC` meist 9-stellig (mit Kante). Fuer Joins gilt die 7-stellige Haltestellennummer: in `halt` heisst sie `bpuic_haltestelle`, in `haltestelle` und `haltestelle_station` `bpuic` (Text).
 - Wetterstation-ID heisst `station_abk` (MeteoSchweiz-Kuerzel).
 
 ## Was B von C braucht
-- Haltestellenliste der Ostschweiz als CSV: `bpuic, sloid, name, kanton, lat, lon, hoehe_m`, Ablage `data/stammdaten/haltestellen_ostschweiz.csv`.
+- Haltestellenliste der Ostschweiz als CSV: `bpuic` (7-stellig), `sloid, name, kanton, lat, lon, hoehe_m`, Ablage `data/stammdaten/haltestellen_ostschweiz.csv`.
 - Die Wetterspalten in `wettermessung` sind ein Vorschlag; C legt sie fest.
 
 ## Dateinamen

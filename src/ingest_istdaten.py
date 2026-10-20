@@ -43,8 +43,10 @@ Quellen (APA 7):
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
+import sys
 import time
 import urllib.request
 import zipfile
@@ -200,8 +202,13 @@ def fetch_day(d: date, input_dir: Path | None, download_dir: Path, archive_templ
         members = [m for m in zf.namelist() if m.endswith(name)]
         if not members:
             raise FileNotFoundError(f"{name} nicht in {zip_path.name} gefunden")
-        zf.extract(members[0], download_dir)
-        (download_dir / members[0]).rename(download_dir / name)
+        # zuerst in eine .part-Datei entpacken und erst danach umbenennen, damit
+        # ein abgebrochenes Entpacken nie als vollstaendige Tagesdatei gilt
+        part = download_dir / (name + ".part")
+        with zf.open(members[0]) as src, open(part, "wb") as out:
+            while chunk := src.read(1 << 20):
+                out.write(chunk)
+        part.rename(download_dir / name)
     return download_dir / name
 
 
@@ -235,7 +242,7 @@ def ts(col: str) -> str:
 # Verarbeitung eines Tages
 # ---------------------------------------------------------------------------
 
-def process_day(con, d: date, args, stop_filter: bool) -> None:
+def process_day(con, d: date, args, stop_filter: bool, filter_id: str) -> None:
     t0 = time.time()
     raw_path = fetch_day(d, args.input_dir, args.download_dir, args.archive_template)
     src = csv_source(raw_path)
@@ -307,8 +314,10 @@ def process_day(con, d: date, args, stop_filter: bool) -> None:
         """)
         rows_loaded = con.execute("SELECT count(*) FROM halt WHERE betriebstag = ?", [d]).fetchone()[0]
         con.execute(
-            "INSERT OR REPLACE INTO ingest_log VALUES ('istdaten', ?, 'ok', ?, ?, ?, ?, current_timestamp)",
-            [d, rows_raw, rows_loaded, round(time.time() - t0, 1), raw_path.name],
+            "INSERT OR REPLACE INTO ingest_log "
+            "(quelle, betriebstag, status, zeilen_roh, zeilen_gefiltert, dauer_s, meldung, geladen_am, filter) "
+            "VALUES ('istdaten', ?, 'ok', ?, ?, ?, ?, current_timestamp, ?)",
+            [d, rows_raw, rows_loaded, round(time.time() - t0, 1), raw_path.name, filter_id],
         )
         con.execute("COMMIT")
     except Exception:
@@ -362,12 +371,25 @@ def main() -> None:
         # Haltestellenliste auch als Stammdatentabelle ablegen (fuer Joins in Paket C)
         con.execute(
             "INSERT OR REPLACE INTO haltestelle "
-            "SELECT CAST(bpuic AS VARCHAR), sloid, name, kanton, lat, lon, TRY_CAST(hoehe_m AS DOUBLE) "
-            f"FROM read_csv('{args.stops.as_posix()}', header=true, all_varchar=true)"
+            # gleicher 7-stelliger Schluessel wie halt.bpuic_haltestelle; mehrere Zeilen
+            # derselben Haltestelle (Kanten) werden zu einer zusammengefasst
+            "SELECT DISTINCT ON (left(bpuic, 7)) left(bpuic, 7), sloid, name, kanton, "
+            "TRY_CAST(lat AS DOUBLE), TRY_CAST(lon AS DOUBLE), TRY_CAST(hoehe_m AS DOUBLE) "
+            f"FROM read_csv('{args.stops.as_posix()}', header=true, all_varchar=true) "
+            "ORDER BY left(bpuic, 7), length(bpuic)"
         )
 
+    # Kennung des Filters: Ein Tag gilt nur als erledigt, wenn er mit demselben
+    # Filter geladen wurde. Sonst (z. B. erst Test ohne Filter, dann mit Liste)
+    # wird er neu geladen, damit nie verschiedene Filter gemischt werden.
+    if stop_filter:
+        ids = [r[0] for r in con.execute("SELECT bpuic FROM stops_filter ORDER BY bpuic").fetchall()]
+        filter_id = "stops:" + hashlib.sha256(",".join(ids).encode()).hexdigest()[:12]
+    else:
+        filter_id = "keiner"
     done = {r[0] for r in con.execute(
-        "SELECT betriebstag FROM ingest_log WHERE quelle = 'istdaten' AND status = 'ok'").fetchall()}
+        "SELECT betriebstag FROM ingest_log WHERE quelle = 'istdaten' AND status = 'ok' AND filter = ?",
+        [filter_id]).fetchall()}
 
     failed = []
     for d in daterange(args.start, args.end):
@@ -375,18 +397,20 @@ def main() -> None:
             log.info("%s: bereits geladen, uebersprungen", d)
             continue
         try:
-            process_day(con, d, args, stop_filter)
+            process_day(con, d, args, stop_filter, filter_id)
         except Exception as exc:  # Fehler protokollieren und mit dem naechsten Tag weitermachen
             log.error("%s: Fehler: %s", d, exc)
             failed.append(d)
             con.execute(
-                "INSERT OR REPLACE INTO ingest_log VALUES ('istdaten', ?, 'fehler', NULL, NULL, NULL, ?, current_timestamp)",
-                [d, str(exc)[:1000]],
+                "INSERT OR REPLACE INTO ingest_log (quelle, betriebstag, status, meldung, geladen_am, filter) "
+                "VALUES ('istdaten', ?, 'fehler', ?, current_timestamp, ?)",
+                [d, str(exc)[:1000], filter_id],
             )
 
-    if failed:
-        log.warning("Fehlende Tage (%d): %s", len(failed), ", ".join(map(str, failed)))
     con.close()
+    if failed:
+        log.error("Fehlende Tage (%d): %s", len(failed), ", ".join(map(str, failed)))
+        sys.exit(1)  # Exit-Code ungleich 0, damit ein unvollstaendiger Lauf auffaellt
 
 
 if __name__ == "__main__":

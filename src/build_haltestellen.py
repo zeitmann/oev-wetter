@@ -72,7 +72,10 @@ def download_boundaries(target_dir: Path) -> Path:
     if not target.exists():
         log.info("Download %s", url)
         target_dir.mkdir(parents=True, exist_ok=True)
-        urllib.request.urlretrieve(url, target)
+        # in .part-Datei laden und erst nach vollstaendigem Download umbenennen
+        part = target.with_name(target.name + ".part")
+        urllib.request.urlretrieve(url, part)
+        part.rename(target)
     if target.suffix == ".zip":  # GeoPackage kann gezippt geliefert werden
         with zipfile.ZipFile(target) as zf:
             gpkg = next(m for m in zf.namelist() if m.endswith(".gpkg"))

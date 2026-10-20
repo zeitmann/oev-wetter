@@ -117,8 +117,11 @@ CREATE TABLE IF NOT EXISTS ingest_log (
     dauer_s          DOUBLE,
     meldung          VARCHAR,
     geladen_am       TIMESTAMPTZ DEFAULT current_timestamp,
+    filter           VARCHAR,                  -- Kennung des Haltestellenfilters ('keiner' oder Pruefsumme der Liste)
     PRIMARY KEY (quelle, betriebstag)
 );
+-- Fuer Datenbanken, die vor Einfuehrung der Spalte angelegt wurden
+ALTER TABLE ingest_log ADD COLUMN IF NOT EXISTS filter VARCHAR;
 
 -- Indizes fuer die typischen Abfragen (Zeit und Haltestelle)
 CREATE INDEX IF NOT EXISTS idx_halt_ab_soll ON halt (ab_soll);

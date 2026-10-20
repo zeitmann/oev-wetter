@@ -359,6 +359,12 @@ def main() -> None:
             f"FROM read_csv('{args.stops.as_posix()}', header=true)"
         )
         log.info("Haltestellenfilter: %d Haltestellen", con.execute("SELECT count(*) FROM stops_filter").fetchone()[0])
+        # Haltestellenliste auch als Stammdatentabelle ablegen (fuer Joins in Paket C)
+        con.execute(
+            "INSERT OR REPLACE INTO haltestelle "
+            "SELECT CAST(bpuic AS VARCHAR), sloid, name, kanton, lat, lon, TRY_CAST(hoehe_m AS DOUBLE) "
+            f"FROM read_csv('{args.stops.as_posix()}', header=true, all_varchar=true)"
+        )
 
     done = {r[0] for r in con.execute(
         "SELECT betriebstag FROM ingest_log WHERE quelle = 'istdaten' AND status = 'ok'").fetchall()}

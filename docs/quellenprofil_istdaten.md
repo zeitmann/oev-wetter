@@ -24,7 +24,8 @@ Stand: 20.10.2026. Zahlen aus der Tagesdatei vom 15.1.2026 (ganze Schweiz, ungef
 
 - **PRODUKT_ID** uneinheitlich: `Bus` (2.08 Mio.) und `BUS` (71 000), dazu `Zug`, `Zahnradbahn`, `Tram`, `Metro`, `Schiff`. Beim Laden wird `BUS` zu `Bus` vereinheitlicht; Zahnradbahn zaehlt zur Bahn.
 - **BPUIC** ist meist 9-stellig (Haltestelle + 2 Ziffern Kante/Gleis, z. B. `850978002` = Haltestelle `8509780`). Fuer den Join mit den Haltestellen-Stammdaten gilt die 7-stellige Nummer (`bpuic_haltestelle`).
-- **Prognose-Status** (Abfahrt): REAL 84 %, GESCHAETZT 5 %, PROGNOSE 4 %, UNBEKANNT 1 %, leer 6 %.
+- **Prognose-Status** (Abfahrt): REAL 84 %, GESCHAETZT 5 %, PROGNOSE 4 %, UNBEKANNT unter 1 %, leer 6 %.
+- **Nach dem Filter (Ostschweiz, 1.1. bis 31.3.2026)**: 17.07 Mio. Halte (Bahn 1.75 Mio., Bus 15.32 Mio.). Echte Messwerte (REAL) bei der Bahn 97 %, beim Bus nur 69 %. Das ist fuer H2 (Bahn vs. Bus) relevant.
 - **Doppelte Halte**: ca. 1 900 Zeilen pro Tag sind doppelt (einmal ohne, einmal mit Prognose). Beim Laden bleibt die Zeile mit dem besten Status. Weitere Fahrten fahren dieselbe Kante mehrmals an (Ringlinien), sie bleiben als `halt_nr` 2, 3 erhalten.
 - **Ausfaelle und Zusatzfahrten**: 14 400 Zeilen `FAELLT_AUS_TF = true`, 16 400 Zusatzfahrten.
 - **Unplausible Ist-Zeiten**: einzelne Ist-Zeiten liegen genau einen Tag vor dem Soll (Verspaetung ca. -1440 Min.), wenige sind um Jahre verschoben. Rund 850 Halte sind mehr als 10 Min. zu frueh, 200 mehr als 60 Min. zu spaet. Diese Werte bleiben in der Datenbank unveraendert und muessen in der Bereinigung (AP 5) behandelt werden, sonst verzerren sie Mittelwerte stark.

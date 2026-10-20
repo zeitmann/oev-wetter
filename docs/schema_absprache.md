@@ -13,8 +13,8 @@ Bitte bestaetigen oder Aenderungen hier eintragen. Massgeblich ist danach `src/s
 - Haltestellen-ID: In den Ist-Daten ist `BPUIC` meist 9-stellig (mit Kante). Fuer Joins gilt die 7-stellige Haltestellennummer: in `halt` heisst sie `bpuic_haltestelle`, in `haltestelle` und `haltestelle_station` `bpuic` (Text).
 - Wetterstation-ID heisst `station_abk` (MeteoSchweiz-Kuerzel).
 
-## Was B von C braucht
-- Haltestellenliste der Ostschweiz als CSV: `bpuic` (7-stellig), `sloid, name, kanton, lat, lon, hoehe_m`, Ablage `data/stammdaten/haltestellen_ostschweiz.csv`.
+## Haltestellen
+- Haltestellenliste der Ostschweiz: von B selbst erstellt (`src/build_haltestellen.py`, 2587 Haltestellen), liegt unter `data/stammdaten/haltestellen_ostschweiz.csv` mit den Spalten `bpuic` (7-stellig), `sloid, name, kanton, lat, lon, hoehe_m` (Hoehe noch leer; C ergaenzt sie bei Bedarf).
 - Die Wetterspalten in `wettermessung` sind ein Vorschlag; C legt sie fest.
 
 ## Dateinamen

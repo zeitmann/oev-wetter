@@ -40,7 +40,9 @@ Die Haltestellenliste liegt im Repo unter `data/stammdaten/haltestellen_ostschwe
 ein gefilterter Beispieltag unter `data/sample/2026-01-15_IstDaten_ostschweiz.csv.gz`.
 
 ## Rohdaten
-Die vollständigen Rohdaten liegen extern: <Link folgt>
+Die gefilterten Ist-Daten (90 Tage, Ostschweiz, Parquet, 305 MB) liegen auf OneDrive (nur mit ZHAW-Konto):
+[oev-wetter-daten](https://zhaw-my.sharepoint.com/:f:/g/personal/kermoala_students_zhaw_ch/IgDMrlyl0G0qQqezxXcxQNQiAQnjVM4nKlivkW6XdSoz_R8?e=VZaW7q)
+Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
 ## Quellen

@@ -10,3 +10,7 @@ venv/
 Thumbs.db
 .vs/
 .vscode/
+
+# Datenbank (wird lokal mit src/ingest_istdaten.py erzeugt)
+data/*.duckdb
+data/*.duckdb.wal

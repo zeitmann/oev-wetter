@@ -48,8 +48,6 @@ DEFAULT_BOUNDARY_DIR = ROOT / "data" / "raw" / "stammdaten"
 # STAC-Katalog von swisstopo: liefert die aktuelle Ausgabe von swissBOUNDARIES3D
 STAC_ITEMS = "https://data.geo.admin.ch/api/stac/v0.9/collections/ch.swisstopo.swissboundaries3d/items"
 
-KANTONE = {"TG", "SG", "AR", "AI"}
-
 # Kantonsnummer (BFS) -> Kuerzel; swissBOUNDARIES3D fuehrt die Nummer im Feld KANTONSNUM
 KANTON_NR = {17: "SG", 15: "AR", 16: "AI", 20: "TG"}
 

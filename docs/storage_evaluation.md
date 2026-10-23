@@ -29,6 +29,19 @@ Stand: 20.10.2026, Entwurf. Entscheid und Begruendung fliessen in Lifecycle-Diag
 
 Fuer Teil 2 ist der Wechsel auf PostgreSQL moeglich, falls das Dashboard viele gleichzeitige Zugriffe braucht; das Schema in `src/schema.sql` ist Standard-SQL und laesst sich mit wenigen Anpassungen uebertragen.
 
+## Skalierbarkeit (gemessen am 20.10.2026)
+
+| Umfang | Zeilen | DuckDB | Parquet (zstd) | Laufzeit |
+| --- | --- | --- | --- | --- |
+| 1 Tag, ganze Schweiz, Bahn und Bus | 2.34 Mio. | 375 MB | ca. 45 MB | 43 s |
+| 90 Tage, Ostschweiz (TG, SG, AR, AI) | 17.07 Mio. | 2.6 GB | 305 MB | ca. 16 Min. inkl. Download |
+| 90 Tage, ganze Schweiz (hochgerechnet) | ca. 210 Mio. | ca. 34 GB | ca. 4 GB | ca. 1 h |
+
+- Die Ingestion liest jede Tagesdatei streamend; der Speicherbedarf haengt nicht von der Dateigroesse ab.
+- Fuer mehr Kantone genuegt eine laengere Haltestellenliste (`src/build_haltestellen.py`, Zuordnung `KANTON_NR` um die BFS-Nummern der Kantone ergaenzen); Code und Schema bleiben gleich.
+- Fuer die ganze Schweiz waere die DuckDB-Datei gross, aber machbar. Alternativ bleiben die Halte als Parquet (nach Betriebstag partitioniert) liegen und DuckDB fragt sie direkt ab (`read_parquet`), ohne sie zu kopieren.
+- Grenze von DuckDB: nur ein schreibender Prozess. Fuer ein Dashboard mit vielen gleichzeitigen Zugriffen (Teil 2) ist PostgreSQL die naechste Stufe.
+
 ## Datenmodell
 
 Tabellen siehe `src/schema.sql`: `haltestelle`, `halt` (Ist-Daten), `wetterstation`, `wettermessung`, `haltestelle_station` (Zuordnung) und `ingest_log`.

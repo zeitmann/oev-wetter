@@ -7,15 +7,16 @@ Bezeichnungen der Phasen und Unterströmungen nach den Kursfolien (Reis & Housle
 ## 1. Diagramm
 
 ```mermaid
-flowchart LR
-    G["<b>Generation</b><br/>Ist-Daten v2<br/>Fahrplan GTFS<br/>swissBOUNDARIES3D<br/>MeteoSchweiz Wetter"]
-    I["<b>Ingestion</b><br/>Python-Skripte<br/>Batch, Monats-Zip<br/>filtern, idempotent"]
-    S["<b>Storage</b><br/>DuckDB<br/>Parquet auf OneDrive"]
-    T["<b>Transformation</b><br/>Bereinigung<br/>räumlicher und zeitlicher Join<br/>Hypothesentests"]
-    V["<b>Serving</b><br/>Web-Dashboard<br/>Karte, Zeitreihen<br/>Wetterfilter"]
-
-    G --> I --> S --> T --> V
-    T -. "aggregierte Tabellen" .-> S
+flowchart TB
+    subgraph P["Phasen des Data Engineering Lifecycle"]
+        direction LR
+        G["<b>Generation</b><br/>Ist-Daten v2<br/>Fahrplan GTFS<br/>swissBOUNDARIES3D<br/>MeteoSchweiz Wetter"]
+        I["<b>Ingestion</b><br/>Python-Skripte<br/>Batch, Monats-Zip<br/>filtern, idempotent"]
+        S["<b>Storage</b><br/>DuckDB<br/>Parquet auf OneDrive"]
+        T["<b>Transformation</b><br/>Bereinigung<br/>räumlicher und zeitlicher Join<br/>Hypothesentests"]
+        V["<b>Serving</b><br/>Web-Dashboard<br/>Karte, Zeitreihen<br/>Wetterfilter"]
+        G --> I --> S --> T --> V
+    end
 
     subgraph U["Unterströmungen"]
         direction LR
@@ -27,7 +28,7 @@ flowchart LR
         U6["Software Engineering"]
     end
 
-    S --- U
+    P ~~~ U
 ```
 
 ## 2. Pro Phase: Quelle, Werkzeug, Entscheidung

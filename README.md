@@ -10,6 +10,17 @@ nach Verkehrsmittel (Bahn/Bus) und Tageszeit?
 - Zeitraum: 1. Januar bis 31. März 2026
 - Quellen: Ist-Daten v2 (opentransportdata.swiss), MeteoSchweiz Open Data
 
+## Konzept (Paket A)
+Volltext mit Problemstellung, Operationalisierung, Methodik und Limitationen: `docs/konzept.md`.
+
+| Hypothese | Aussage |
+| --- | --- |
+| H1 | Bei starkem Niederschlag oder Schnee ist die mittlere Verspätung höher als sonst. |
+| H2 | Der Effekt ist beim Bus stärker als bei der Bahn. |
+| H3 | Der Effekt ist in der Hauptverkehrszeit stärker als ausserhalb. |
+
+Festlegungen: Verspätung = Ankunftsverspätung pro Halt in Minuten, verspätet ab 3 Minuten (nach SBB AG, o. J.), nur gemessene Werte im Fenster −10 bis +60 Minuten; starker Niederschlag = Stundensumme über dem 90. Perzentil der Niederschlagsstunden; Hauptverkehrszeit = Mo–Fr 6–9 und 16–19 Uhr. Tests: Mann-Whitney-U (H1), Regression mit Wechselwirkung (H2, H3), α = 0,05, immer mit Effektstärke.
+
 ## Skalierung (Ausblick)
 Funktioniert die Pipeline in der Ostschweiz zuverlässig, wird geprüft, ob
 sie auf weitere Kantone, die Deutschschweiz oder die ganze Schweiz

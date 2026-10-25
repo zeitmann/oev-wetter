@@ -12,6 +12,7 @@ nach Verkehrsmittel (Bahn/Bus) und Tageszeit?
 
 ## Konzept (Paket A)
 Volltext mit Problemstellung, Operationalisierung, Methodik und Limitationen: `docs/konzept.md`.
+Lifecycle-Entwurf (Phasen, Unterströmungen, Serving): `docs/lifecycle.md`.
 
 | Hypothese | Aussage |
 | --- | --- |

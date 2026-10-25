@@ -2,7 +2,7 @@
 
 Projektarbeit Teil 1, Gruppe 4. Autor: Timon (Paket A). Stand: 25.10.2026, **Grobentwurf**. Ingestion und Storage sind von Paket B belegt (`docs/storage_evaluation.md`, `docs/quellenprofil_istdaten.md`). Die Zeilen zu Wetter und Transformation sind vorläufig, bis Paket C liefert, und mit *(vorläufig)* markiert.
 
-Bezeichnungen der Phasen und Unterströmungen nach den Kursfolien (Reis & Housley, 2020).
+Bezeichnungen der Phasen und Unterströmungen nach den Kursfolien (Reis & Housley, 2022).
 
 ## 1. Diagramm
 
@@ -68,6 +68,6 @@ flowchart TB
 
 ## Quellen
 
-Reis, J., & Housley, M. (2020). *Fundamentals of data engineering*. O'Reilly Media. (Phasen und Unterströmungen, nach den Kursfolien DAENG_Einfuehrung)
+Reis, J., & Housley, M. (2022). *Fundamentals of data engineering*. O'Reilly Media.
 
 DuckDB Foundation. (2026). *DuckDB documentation*. https://duckdb.org/docs/

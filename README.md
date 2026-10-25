@@ -58,4 +58,17 @@ Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
 ## Quellen
-Zitierstandard: APA 7 (SML-Zitierleitfaden).
+Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.
+
+**Daten**
+
+- SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Ist-Daten v2* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/actual_data_archive.htm
+- SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Fahrplan 2026 (GTFS)* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/timetable_gtfs.htm
+- Bundesamt für Landestopografie swisstopo. (2026). *swissBOUNDARIES3D* [Datensatz]. https://www.swisstopo.admin.ch
+- [MeteoSchweiz: Wetterdaten, APA-Eintrag von Paket C ergänzen, Quellenangabe laut Lizenz]
+
+**Literatur und Werkzeuge**
+
+- Reis, J., & Housley, M. (2022). *Fundamentals of data engineering*. O'Reilly Media.
+- SBB AG. (o. J.). *So misst die SBB die Pünktlichkeit* [Webseite]. https://company.sbb.ch/de/unternehmen/verantwortung/kunden/puenktlichkeit.html
+- DuckDB Foundation. (2026). *DuckDB documentation*. https://duckdb.org/docs/

@@ -49,7 +49,7 @@ flowchart TB
 | Data Management | Quellenprofile (Herkunft, Lizenz, Format, Limitationen), gemeinsame Schema-Absprache (`docs/schema_absprache.md`), Datenqualität dokumentiert (Anteil gemessener Werte: Bahn 97 %, Bus 69 %), Bereinigungsregeln im Konzept festgelegt. |
 | DataOps | Idempotente Ingestion, `ingest_log` mit Zeilen vor und nach dem Filter, Fehlern und Dauer. Wiederholbarer Aufbau der Datenbank mit einem Befehl. Versionierung in Git, Arbeit auf Branches. |
 | Data Architecture | Batch-Architektur mit DuckDB und Parquet. Skalierbar auf mehr Kantone oder die ganze Schweiz (ca. 210 Mio. Zeilen, 34 GB hochgerechnet). Für Teil 2 ist der Wechsel auf PostgreSQL möglich. |
-| Orchestration | Aktuell manuell: Skripte werden nacheinander von Hand ausgeführt (Haltestellenliste, Ist-Daten, Wetter, Transformation). Ein Scheduler ist für Teil 1 nicht nötig. Für den Ausbau wäre cron oder ein Orchestrierungswerkzeug denkbar. *(Entscheid offen)* |
+| Orchestration | Entscheid: manuell, mit festgelegter Reihenfolge der Skripte (Haltestellenliste, Ist-Daten, Wetter, Transformation, in der README beschrieben). Ein Scheduler lohnt sich für Teil 1 nicht, weil es sich um ein einmaliges Archiv von 90 Tagen handelt und jeder Schritt wiederholbar ist (idempotent, Log pro Tag). Beim Ausbau auf aktuelle Daten oder mehr Kantone wäre cron oder ein Orchestrierungswerkzeug der nächste Schritt. |
 | Software Engineering | Python und SQL, `requirements.txt`, kommentierter Code mit Quellen nach APA 7, Notebooks in `notebooks/`, Skripte in `src/`, Abgabe über einen eingefrorenen Branch. |
 
 ## 4. Serving: Entwurf Web-Dashboard

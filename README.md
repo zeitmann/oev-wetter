@@ -10,6 +10,18 @@ nach Verkehrsmittel (Bahn/Bus) und Tageszeit?
 - Zeitraum: 1. Januar bis 31. März 2026
 - Quellen: Ist-Daten v2 (opentransportdata.swiss), MeteoSchweiz Open Data
 
+## Konzept (Paket A)
+Volltext mit Problemstellung, Operationalisierung, Methodik und Limitationen: `docs/konzept.md`.
+Lifecycle-Entwurf (Phasen, Unterströmungen, Serving): `docs/lifecycle.md`.
+
+| Hypothese | Aussage |
+| --- | --- |
+| H1 | Bei starkem Niederschlag oder Schnee ist die mittlere Verspätung höher als sonst. |
+| H2 | Der Effekt ist beim Bus stärker als bei der Bahn. |
+| H3 | Der Effekt ist in der Hauptverkehrszeit stärker als ausserhalb. |
+
+Festlegungen: Verspätung = Ankunftsverspätung pro Halt in Minuten, verspätet ab 3 Minuten (nach SBB AG, o. J.), nur gemessene Werte im Fenster −10 bis +60 Minuten; starker Niederschlag = Stundensumme über dem 90. Perzentil der Niederschlagsstunden; Hauptverkehrszeit = Mo–Fr 6–9 und 16–19 Uhr. Tests: Mann-Whitney-U (H1), Regression mit Wechselwirkung (H2, H3), α = 0,05, immer mit Effektstärke.
+
 ## Skalierung (Ausblick)
 Funktioniert die Pipeline in der Ostschweiz zuverlässig, wird geprüft, ob
 sie auf weitere Kantone, die Deutschschweiz oder die ganze Schweiz
@@ -46,4 +58,17 @@ Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
 ## Quellen
-Zitierstandard: APA 7 (SML-Zitierleitfaden).
+Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.
+
+**Daten**
+
+- SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Ist-Daten v2* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/actual_data_archive.htm
+- SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Fahrplan 2026 (GTFS)* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/timetable_gtfs.htm
+- Bundesamt für Landestopografie swisstopo. (2026). *swissBOUNDARIES3D* [Datensatz]. https://www.swisstopo.admin.ch
+- [MeteoSchweiz: Wetterdaten, APA-Eintrag von Paket C ergänzen, Quellenangabe laut Lizenz]
+
+**Literatur und Werkzeuge**
+
+- Reis, J., & Housley, M. (2022). *Fundamentals of data engineering*. O'Reilly Media.
+- SBB AG. (o. J.). *So misst die SBB die Pünktlichkeit* [Webseite]. https://company.sbb.ch/de/unternehmen/verantwortung/kunden/puenktlichkeit.html
+- DuckDB Foundation. (2026). *DuckDB documentation*. https://duckdb.org/docs/

@@ -57,6 +57,79 @@ Die gefilterten Ist-Daten (90 Tage, Ostschweiz, Parquet, 305 MB) liegen auf OneD
 Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
+## Wetter, Transformation und Analyse (Paket C)
+
+Vorhandene Übergabe von B verwenden: `halt.zip` nach `data/raw/paket-b-daten/`
+entpacken (`halt/betriebstag=.../*.parquet`), `haltestelle.parquet` und
+`ingest_log.parquet` daneben ablegen. Die Ist-Daten müssen nicht neu heruntergeladen werden.
+
+```bash
+pip install -r requirements.txt
+python src/load_paket_b.py
+python src/ingest_wetter.py --start 2026-01-01 --end 2026-03-31
+python src/build_haltestellen_hoehen.py
+python src/transform.py --start 2026-01-01 --end 2026-03-31
+python src/analyse.py
+python -m unittest discover -s tests -v
+```
+
+Auf dieser Windows-Installation liegt Python lokal unter `.venv/python.exe`;
+damit kann `python` in den Befehlen ersetzt werden. Die Umgebung wird nicht versioniert.
+Die Skripte sind wiederholbar: B-Tabellen werden übersprungen, Wetterdaten anhand
+ihres Schlüssels ersetzt und Analyseergebnisse neu aufgebaut. `--force` lädt die
+jeweilige Quelle neu. Für Wetter und Höhen ist beim ersten Lauf Internet nötig.
+
+Ausgeführte Notebooks: `notebooks/01_bereinigung_join.ipynb` und
+`notebooks/02_hypothesen.ipynb`. Sie zeigen Methodik, Datenqualität und Ergebnisse;
+die wiederverwendbaren Schritte liegen wie bei Paket B in `src/`.
+
+### Notebooks auf einem anderen Rechner ausführen
+
+Python 3.12 verwenden und `pip install -r requirements.txt` ausführen.
+Anschliessend mit **demselben Python** den im Notebook eingetragenen Kernel anlegen:
+
+```bash
+python -m ipykernel install --user --name oev-wetter --display-name "Python (oev-wetter)"
+```
+
+In VS Code oder Jupyter den Kernel **Python (oev-wetter)** auswählen und zuerst
+`01_bereinigung_join.ipynb`, danach `02_hypothesen.ipynb` ausführen. In VS Code kann
+alternativ direkt die Python-Umgebung mit den installierten Abhängigkeiten gewählt werden.
+Die gespeicherten Ausgaben sind auch ohne erneute Berechnung lesbar. Die getesteten
+Paketversionen stehen unter `docs/ergebnisse/umgebung.txt`.
+
+### Präsentation und Datenübergabe
+
+Fertige Folien für C: `docs/folien_paket_c.pptx` mit Sprechernotizen und
+`docs/folien_paket_c.pdf`. Fünf Vortragsfolien für etwa fünf Minuten, dazu eine
+Quellenfolie im Anhang. Sie können in die gemeinsame Präsentation übernommen werden.
+Optional neu erzeugen: `pip install python-pptx` und `python src/build_folien.py`.
+Der PDF-Export stammt aus PowerPoint.
+
+Das Datenpaket `data/processed/paket_c_daten.zip` ist für die externe Übergabe fertig.
+Es enthält die vollständigen Wetter-/Höhenquellen und bereinigten Ergebnisse, aber
+nicht erneut Bs bereits separat bereitgestellte Ist-Daten. Archiv in die Projektwurzel
+entpacken; die enthaltene LIESMICH erläutert die Struktur. **Der Upload von C und ein
+bestätigter Download-Link stehen noch aus.** Einen Link erst nach erfolgreichem Upload
+und Zugriffstest ergänzen. Lokale Dateipfade ersetzen den externen Datenzugriff nicht.
+
+- Wetterquelle und Vergleich: `docs/quellenprofil_wetter.md`.
+- Bereinigung, Zuordnung und Definitionen: `docs/transformation.md`.
+- Ergebnisse, Limitationen und Folienvorlage: `docs/uebergabe_paket_c.md`.
+- Kleine Ergebnistabellen und Grafiken: `docs/ergebnisse/`.
+- Bereinigte Daten: Tabelle `analyse_halt` in `data/oev_wetter.duckdb` und
+  `data/processed/analyse_halt.parquet` (lokal, nicht im Repo).
+- Stundenaggregation für Teil 2: `analyse_stunde`, ebenso als Parquet.
+
+Stand der Auswertung: 11’626’929 Halte mit Wetterzuordnung. Bei starkem Niederschlag
+liegt die mittlere Ankunftsverspätung um 0,221 Minuten höher. H2 (stärkerer Effekt
+beim Bus) wird nicht gestützt; H3 (stärker in der HVZ) zeigt die entgegengesetzte
+Richtung. Das sind Zusammenhänge im untersuchten Zeitraum, keine Kausaleffekte.
+Die neu erzeugten Roh- und Analysedaten müssen für die Abgabe zusätzlich extern
+bereitgestellt werden; der oben verlinkte OneDrive-Ordner enthält bislang Bs Übergabe.
+Das fertige lokale Datenpaket dafür liegt unter `data/processed/paket_c_daten.zip`
+(inklusive unveränderter Wetter-/Höhenquellen, bereinigter Parquet-Dateien und LIESMICH).
+
 ## Quellen
 Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.
 
@@ -65,7 +138,8 @@ Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen s
 - SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Ist-Daten v2* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/actual_data_archive.htm
 - SBB AG, Geschäftsstelle Systemaufgaben Kundeninformation. (2026). *Fahrplan 2026 (GTFS)* [Datensatz]. Open-Data-Plattform Mobilität Schweiz. https://archive.opentransportdata.swiss/timetable_gtfs.htm
 - Bundesamt für Landestopografie swisstopo. (2026). *swissBOUNDARIES3D* [Datensatz]. https://www.swisstopo.admin.ch
-- [MeteoSchweiz: Wetterdaten, APA-Eintrag von Paket C ergänzen, Quellenangabe laut Lizenz]
+- Bundesamt für Meteorologie und Klimatologie MeteoSchweiz. (2026). *Automatische Wetterstationen: Messwerte* [Datensatz]. https://data.geo.admin.ch/api/stac/v1/collections/ch.meteoschweiz.ogd-smn (Quelle: MeteoSchweiz).
+- Bundesamt für Landestopografie swisstopo. (2026). *Height: GeoAdmin API* [Höhendienst]. https://api3.geo.admin.ch/services/sdiservices.html#height
 
 **Literatur und Werkzeuge**
 

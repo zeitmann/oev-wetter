@@ -1,0 +1,13 @@
+{
+  "halt_zeilen": 17073238,
+  "wetter_zeilen": 28704,
+  "logs": {
+    "istdaten": 90,
+    "wetter": 90
+  },
+  "analysierte_halte": 11626929,
+  "analyse_stunden_gruppen": 932725,
+  "ungueltige_analysewerte": 0,
+  "wetter_duplikate": 0,
+  "parquet_zeilen": 11626929
+}

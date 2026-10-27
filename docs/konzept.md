@@ -58,7 +58,7 @@ Weitere Festlegungen:
 - **Räumliche Zuordnung:** Die Wetterstation liegt nicht am Halt. Das Wetter am Halt kann vom Wetter an der Station abweichen, besonders bei Höhenunterschieden.
 - **Mehrere Ursachen:** Verspätungen haben viele Ursachen (Baustellen, Störungen, Fahrgastaufkommen). Der Wettereffekt kann nicht isoliert werden. Die Ergebnisse zeigen Zusammenhänge, keine Kausalität.
 - **Echtzeitdaten:** Nicht alle Halte haben gemessene Ist-Werte. Fahrten ohne Echtzeitdaten und ausgefallene Fahrten fehlen oder werden gesondert behandelt.
-- **Unterschiedliche Datenqualität:** Der Anteil gemessener Werte (`REAL`) ist bei der Bahn deutlich höher als beim Bus (Ankunft am 15.1.2026: Bahn 98 %, Bus 66 %; Abfahrt gesamter Zeitraum: Bahn 97 %, Bus 69 %, siehe `docs/quellenprofil_istdaten.md`). Der Vergleich in H2 beruht deshalb auf unterschiedlich vollständigen Teilmengen.
+- **Unterschiedliche Datenqualität:** Der Anteil gemessener Werte (`REAL`) ist bei der Bahn deutlich höher als beim Bus (Ankunftsstatus `REAL` im gesamten Zeitraum vor der Bereinigung: Bahn 89,7 %, Bus 65,9 %, siehe `docs/transformation.md`; die für die Abfahrt genannten 97 %/69 % in `docs/quellenprofil_istdaten.md` sind damit nicht vergleichbar). Der Vergleich in H2 beruht deshalb auf unterschiedlich vollständigen Teilmengen.
 - **Übertragung der SBB-Definition:** Die 3-Minuten-Schwelle stammt aus der Zugpünktlichkeit und wird für Busse übernommen.
 - **Abhängigkeit der Beobachtungen:** Halte derselben Fahrt oder Linie sind nicht unabhängig, was Signifikanzwerte beeinflusst.
 - **Zeitraum:** Der Zeitraum umfasst nur drei Monate eines einzigen Winters (1.1.–31.3.2026). Aussagen über andere Jahreszeiten oder Jahre sind nicht möglich.

@@ -9,7 +9,7 @@
 --            Die Ist-Daten liegen in Lokalzeit (Europe/Zurich) vor und werden
 --            beim Laden umgerechnet; damit ist die Sommerzeitumstellung am
 --            29.3.2026 korrekt abgebildet. Der Betriebstag bleibt ein DATE.
--- Status:    ENTWURF, Spaltennamen der Wettertabellen mit Paket C abstimmen.
+-- Status:    Paket C verwendet die vorgeschlagenen Wetterspalten (26.10.2026).
 --
 -- Quellen (APA 7):
 -- DuckDB Foundation. (2026). DuckDB documentation: CREATE TABLE statement.
@@ -20,7 +20,7 @@
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- Haltestellen (aus Haltestellen-Stammdaten, geliefert von Paket C)
+-- Haltestellen (Stammdaten von Paket B; Gelaendehoehen ergaenzt durch Paket C)
 -- Schluessel: BPUIC (Betriebspunkt-Nummer, wie in den Ist-Daten).
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS haltestelle (
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS halt (
 );
 
 -- -----------------------------------------------------------------------------
--- Wetterstationen und -messungen (Spalten legt Paket C fest, hier Vorschlag)
+-- Wetterstationen und -messungen (SwissMetNet-Stundenwerte, Paket C)
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS wetterstation (
     station_abk      VARCHAR PRIMARY KEY,     -- MeteoSchweiz-Kuerzel, z. B. 'STG'

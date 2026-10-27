@@ -1,0 +1,22 @@
+{
+  "start": "2026-01-01",
+  "end": "2026-03-31",
+  "niederschlag_q90_mm": 1.7,
+  "max_distanz_km": 30.0,
+  "max_hoehendiff_m": 500.0,
+  "geeignete_stationen": [
+    "ARH",
+    "BIZ",
+    "EBK",
+    "GUT",
+    "HAI",
+    "OBR",
+    "RAG",
+    "SAE",
+    "STG",
+    "TAE"
+  ],
+  "haltestellen_gesamt": 2587,
+  "haltestellen_zugeordnet": 2540,
+  "halte_analyse": 11626929
+}

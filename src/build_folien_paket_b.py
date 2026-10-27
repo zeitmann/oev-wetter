@@ -213,7 +213,7 @@ def main():
     text(s, 6.85, 4.15, 6.0, 2.2,
         '• Ankunft echt gemessen (REAL): Bahn 89,7 %, Bus 65,9 %\n'
         '• Unplausible Ist-Zeiten (z. B. genau 1 Tag daneben) bleiben roh\n'
-        '• Status jeder Zeit (REAL, PROGNOSE, GESCHAETZT) wird mitgeführt', 16, space=6)
+        '• Status jeder Zeit (REAL, PROGNOSE, GESCHAETZT, UNBEKANNT, leer) wird mitgeführt', 16, space=6)
 
     # 4 Storage-Evaluation
     s = base(prs, 'Storage: DuckDB – analytisch, eine Datei, kein Server', 4,
@@ -256,7 +256,8 @@ def main():
         text(s, x + .15, 2.2, 2.5, 1.1, body, 14, WHITE if dark else NAVY, space=4)
         if i < len(boxen) - 1:
             arrow(s, x + 2.77, 2.45, x + 3.13, 2.45)
-    text(s, 2.95, 3.45, 3.0, .4, 'bpuic', 12, GREY, font='Consolas')
+    # halt.bpuic ist meist 9-stellig (Kante); gejoint wird ueber die 7-stellige bpuic_haltestelle
+    text(s, 1.9, 3.45, 3.0, .4, 'bpuic_haltestelle = bpuic', 12, GREY, font='Consolas')
     text(s, 6.1, 3.45, 3.0, .4, 'bpuic', 12, GREY, font='Consolas')
     text(s, 9.25, 3.45, 3.0, .4, 'station_abk', 12, GREY, font='Consolas')
     unten = [(.55, 'ingest_log', 'Pro Tag: Status, Zeilen vor/nach Filter, Dauer, Fehler'),
@@ -302,7 +303,8 @@ def main():
           'Rohzeiten sind Lokalzeit. Wir wandeln sie mit Europe/Zurich in TIMESTAMPTZ um, '
           'so stimmen Dauern über die Umstellung am 29.3.')],
         [('Wie zuverlässig sind die Ist-Zeiten?',
-          'Ankunft gemessen: Bahn 89,7 %, Bus 65,9 %, der Rest sind Prognosen oder Schätzungen. '
+          'Ankunft gemessen: Bahn 89,7 %, Bus 65,9 %. Der Rest sind Prognosen, Schätzungen oder Halte '
+          'mit leerem oder unbekanntem Status (z. B. ohne Ankunft am Startort). '
           'Der Status ist pro Zeit gespeichert, Paket C nimmt nur gemessene Werte.'),
          ('Wie habt ihr die Haltestellen den Kantonen zugeordnet?',
           'Koordinaten aus dem GTFS-Fahrplan, dann Punkt-in-Polygon mit den Kantonsgrenzen '

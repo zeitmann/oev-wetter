@@ -12,7 +12,7 @@ flowchart TB
         direction LR
         G["<b>Generation</b><br/>Ist-Daten v2<br/>Fahrplan GTFS<br/>swissBOUNDARIES3D<br/>MeteoSchweiz Wetter"]
         I["<b>Ingestion</b><br/>Python-Skripte<br/>ÖV: Monats-Zip, Wetter: STAC-CSV<br/>filtern, idempotent"]
-        S["<b>Storage</b><br/>DuckDB und Parquet<br/>B-Daten auf OneDrive<br/>C-Vollbestände bisher lokal"]
+        S["<b>Storage</b><br/>DuckDB und Parquet<br/>Daten von B und C auf OneDrive"]
         T["<b>Transformation</b><br/>Bereinigung<br/>räumlicher und zeitlicher Join<br/>Hypothesentests"]
         V["<b>Serving</b><br/>Web-Dashboard<br/>Karte, Zeitreihen<br/>Wetterfilter"]
         G --> I --> S --> T --> V
@@ -45,7 +45,7 @@ flowchart TB
 
 | Unterströmung | Umsetzung im Projekt |
 | --- | --- |
-| Security | Nur offene Daten, keine Personendaten. Quellenangabe nach Lizenz Pflicht. Bs Daten liegen auf OneDrive mit ZHAW-Zugriff; Cs zusätzliche Vollbestände sind bisher lokal und für die externe Abgabe gepackt. Keine Zugangsdaten im Repo (`.env` ist ausgeschlossen). |
+| Security | Nur offene Daten, keine Personendaten. Quellenangabe nach Lizenz Pflicht. Die Daten von B und C liegen auf OneDrive mit ZHAW-Zugriff. Keine Zugangsdaten im Repo (`.env` ist ausgeschlossen). |
 | Data Management | Quellenprofile, gemeinsame Schema-Absprache, Bereinigungs- und Join-Bilanzen. Gemessener Ankunftsstatus vor Bereinigung: Bahn 89,72 %, Bus 65,94 %; die früher genannten 97 %/69 % betreffen Abfahrten. Wetterlücken und räumliche Abdeckung sind dokumentiert. |
 | DataOps | Idempotente Ingestion, `ingest_log` mit Zeilen vor und nach dem Filter, Fehlern und Dauer. Wiederholbarer Aufbau der Datenbank mit einem Befehl. Versionierung in Git, Arbeit auf Branches. |
 | Data Architecture | Batch-Architektur mit DuckDB und Parquet. Skalierbar auf mehr Kantone oder die ganze Schweiz (ca. 210 Mio. Zeilen, 34 GB hochgerechnet). Für Teil 2 ist der Wechsel auf PostgreSQL möglich. |
@@ -60,13 +60,13 @@ flowchart TB
 - **Kennzahlen:** Effekt von Niederschlag auf die Verspätung pro Gruppe (H1 bis H3) mit Effektstärke.
 - **Datenfluss:** Transformation schreibt aggregierte Tabellen, das Dashboard liest diese. Technologie darf offen bleiben (z. B. Python-Dashboard oder SvelteKit mit PostgreSQL oder DuckDB).
 
-## 5. Umsetzung Paket C und offene Abgabeablage
+## 5. Umsetzung Paket C und Datenablage
 
 - Wetter-Ingestion: `src/ingest_wetter.py`; Haltestellenhöhen: `src/build_haltestellen_hoehen.py`.
 - Transformation und Statistik: `src/transform.py`, `src/analyse.py`, ausgeführte Notebooks.
 - Wetterspalten wie in Bs Schema, Ergebnisse lokal in DuckDB und `data/processed/`.
 - Übergabe, Resultate und Folienvorlage: `docs/uebergabe_paket_c.md`.
-- Noch offen für die Abgabe: Wetter-/Höhenrohdaten und bereinigte Vollbestände extern bereitstellen und Link im README ergänzen. Die vorhandene OneDrive-Ablage betrifft Bs Daten.
+- Ablage: Wetter-/Höhenrohdaten und bereinigte Vollbestände liegen als `paket_c_daten.zip` im selben OneDrive-Ordner wie Bs Daten (Link im README).
 
 ## Quellen
 

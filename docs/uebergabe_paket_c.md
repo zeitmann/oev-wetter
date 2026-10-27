@@ -1,6 +1,6 @@
 # Übergabe Paket C an Paket A und B
 
-Enis · Gruppe 4 · Stand: 26.10.2026 · Teil 1
+Enis · Gruppe 4 · Stand: 26.10.2026, Status der Abgabe aktualisiert am 27.10.2026 (Timon) · Teil 1
 
 ## Was umgesetzt ist
 
@@ -84,24 +84,25 @@ zu unterscheiden. Die Daten belegen keine Kausalität.
 - Bereinigte Daten: DuckDB-Tabellen `analyse_halt`, `analyse_stunde`, zusätzlich
   `data/processed/analyse_halt.parquet` und `analyse_stunde.parquet` (nicht im Repo).
 - Nachbau: Befehle im README. Wetter-/Höhenrohdaten und abgeleitete Vollbestände
-  liegen **nur lokal**; externe Ablage samt Link muss vor Abgabe ergänzt werden.
-  Dafür ist `data/processed/paket_c_daten.zip` mit Quellen, Ergebnissen und LIESMICH vorbereitet.
+  liegen als `paket_c_daten.zip` (Quellen, Ergebnisse und LIESMICH) im OneDrive-Ordner
+  `oev-wetter-daten`, Link im README.
 - APA-Quellen in README und Code ergänzt; Lifecycle mit Umsetzung von C aktualisiert.
-- Es wurde nichts gepusht, kein PR und kein Abgabe-Branch erstellt.
+- Paket C ist in `main` (Pull Request #4, 27.10.2026).
 
 ## Abschluss der Gruppenabgabe
 
-1. C-Datenpaket in die gemeinsame OneDrive-Ablage hochladen, Leserechte für die
-   Prüfenden sicherstellen und den tatsächlichen Download-Link im README ergänzen.
-   Der Upload ist bisher nicht erfolgt.
-2. Enis committet die Projektdateien einschliesslich neuer Dateien und pusht sie;
-   Vollbestände unter `data/raw/` und `data/processed/` bleiben ausserhalb von Git.
-3. A übernimmt Cs fertige Folien in die gemeinsame Präsentation, vereinheitlicht
-   die Gestaltung und prüft mit B/C die Gesamtredezeit von 15 Minuten.
-4. A erstellt den Abgabe-Branch erst aus dem vollständigen, gepushten Gruppenstand.
+1. Erledigt (27.10.2026): C-Datenpaket liegt im gemeinsamen OneDrive-Ordner
+   `oev-wetter-daten`, der Link steht im README. Zugriff mit ZHAW-Konto geprüft.
+2. Erledigt (27.10.2026): Projektdateien von C sind gepusht und in `main` gemergt
+   (Pull Request #4); Vollbestände unter `data/raw/` und `data/processed/` bleiben
+   ausserhalb von Git.
+3. Teilweise erledigt: Die Folien von A und C liegen in `docs/präsentation/`
+   (`folien_paket_a.*`, `folien_paket_c.*`, im gleichen Stil). Offen: Folien von B,
+   die gemeinsame Reihenfolge und die Gesamtredezeit von 15 Minuten (Kolloquium 4.11.2026).
+4. Offen: A erstellt den Abgabe-Branch erst aus dem vollständigen Stand von `main`.
    Danach den Stand nicht mehr verändern.
-5. A hinterlegt den Branch-Link in Moodle und prüft den Zugriff auf Code, Daten
-   und Präsentation. Die Moodle-Einreichung ist nicht erfolgt.
+5. Offen: A hinterlegt den Branch-Link in Moodle (Frist 27.10.2026, 23:59) und prüft
+   den Zugriff auf Code, Daten und Präsentation.
 
 Die Einrichtung des Notebook-Kernels für andere Rechner steht jetzt im README.
 

@@ -21,7 +21,7 @@ GREY = '53616B'
 WHITE = 'FFFFFF'
 LIGHT = 'EEF4F6'
 # Gruppenmitglieder alphabetisch nach Nachnamen (Titelfolie)
-NAMEN = 'Enis, Aladin, Timon Wallroth'
+NAMEN = 'Enis Farizi, Aladin Kermo, Timon Wallroth'
 FOOTER = 'Gruppe 4 · Timon · Paket A | Quellen: SBB AG (o. J.), Reis & Housley (2022), DuckDB Foundation (2026)'
 
 

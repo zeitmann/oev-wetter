@@ -20,7 +20,9 @@ GREEN = '167D8D'
 GREY = '53616B'
 WHITE = 'FFFFFF'
 LIGHT = 'EEF4F6'
-FOOTER = 'Gruppe 4 · Timon · Paket A · 27.10.2026 | Quellen: SBB AG (o. J.), Reis & Housley (2022), DuckDB Foundation (2026)'
+# Gruppenmitglieder alphabetisch nach Nachnamen (Titelfolie)
+NAMEN = 'Farizi Enis, Kermo Aladin, Wallroth Timon'
+FOOTER = 'Gruppe 4 · Timon · Paket A | Quellen: SBB AG (o. J.), Reis & Housley (2022), DuckDB Foundation (2026)'
 
 
 def out_dir():
@@ -90,20 +92,20 @@ def main():
     s = base(prs, None, 1,
         'Begrüssung, Thema in einem Satz: Wir untersuchen, ob und wie stark Niederschlag, '
         'Schnee und Frost die Pünktlichkeit von Bahn und Bus in der Ostschweiz beeinflussen. '
-        'Gesamtdauer des Referats: 15 Minuten, je ca. 5 Minuten pro Person.')
-    text(s, .55, 1.5, 12.2, .5, 'PROJEKTARBEIT TEIL 1 · DATA ENGINEERING HS26', 20, GREEN, True)
-    text(s, .55, 2.2, 12.2, 2.2, 'Beeinflusst das Wetter die Pünktlichkeit des öV?', 46, NAVY, True)
-    text(s, .55, 4.3, 12.2, .6, 'Bahn und Bus in der Ostschweiz, Winter 2026', 26, GREEN, True)
-    text(s, .55, 5.2, 12.2, .5, 'Gruppe 4: Timon, Aladin, Enis', 22)
-    text(s, .55, 5.8, 12.2, .5, 'Kolloquium 4. November 2026, 18:00 · Raum SW 111', 18, GREY)
+        'Danach stellen wir die drei Teile der Reihe nach vor.')
+    text(s, .55, 1.3, 7.2, .5, 'PROJEKTARBEIT TEIL 1 · DATA ENGINEERING HS26', 18, GREEN, True)
+    text(s, .55, 1.85, 7.6, 2.4, 'Beeinflusst das Wetter die Pünktlichkeit des öV?', 40, NAVY, True, space=0)
+    text(s, .55, 3.75, 8.5, .6, 'Bahn und Bus in der Ostschweiz, Winter 2026', 24, GREEN, True)
+    # Namen alphabetisch nach Nachnamen
+    text(s, .55, 4.5, 8.5, .5, f'Gruppe 4: {NAMEN}', 20)
 
     # 2 Ablauf
-    s = base(prs, 'Drei Pakete, je ca. 5 Minuten', 2,
+    s = base(prs, 'Aufbau des Referats', 2,
         'Ca. 30 Sekunden. Kurz den Ablauf nennen: Jede Person präsentiert einen eigenständigen '
-        'Teil. Danach 7 Minuten Diskussion im Plenum.')
+        'Teil. Danach Diskussion im Plenum.')
     pakete = [('Paket A · Timon', 'Konzept und Rahmen',
                'Problemstellung, Forschungsfrage, Hypothesen, Methodik, Lifecycle'),
-              ('Paket B · Aladin', 'Daten rein',
+              ('Paket B · Aladin', 'Datenbeschaffung und Speicherung',
                'Ist-Daten, Ingestion, Storage-Entscheid, Datenmodell'),
               ('Paket C · Enis', 'Daten verknüpfen',
                'Wetterdaten, Bereinigung, Join, Resultate, Limitationen')]
@@ -113,7 +115,7 @@ def main():
         text(s, x + .25, 1.75, 3.5, .5, who, 20, GREEN, True)
         text(s, x + .25, 2.45, 3.5, .7, what, 26, NAVY, True)
         text(s, x + .25, 3.6, 3.5, 1.4, desc, 19, GREY)
-    text(s, .55, 5.6, 12, .5, 'Danach: Fragen und Diskussion im Plenum (7 Minuten)', 22, GREEN, True)
+    text(s, .55, 5.6, 12, .5, 'Danach: Fragen und Diskussion im Plenum', 22, GREEN, True)
 
     # 3 Problemstellung
     s = base(prs, 'Problemstellung: Wetter und Pünktlichkeit im öV', 3,
@@ -219,7 +221,7 @@ def main():
         card(s, x, 1.5, 3.95, 3.2)
         text(s, x + .25, 1.75, 3.5, .6, head, 26, GREEN, True)
         text(s, x + .25, 2.6, 3.5, 1.9, body, 20)
-    text(s, .55, 5.4, 12.2, .6, 'Abgabe Teil 2: 8. Dezember 2026 · Fragen und Diskussion (7 Minuten)',
+    text(s, .55, 5.4, 12.2, .6, 'Fragen und Diskussion',
          19, GREEN, True)
 
     # 8 Quellen

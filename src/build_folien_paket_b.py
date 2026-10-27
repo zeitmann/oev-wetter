@@ -28,7 +28,7 @@ GREEN = '167D8D'
 GREY = '53616B'
 WHITE = 'FFFFFF'
 LIGHT = 'EEF4F6'
-FOOTER = ('Gruppe 4 · Aladin · Paket B · 27.10.2026 | Quellen: SBB/SKI (2026), '
+FOOTER = ('Gruppe 4 · Aladin · Paket B | Quellen: SBB/SKI (2026), '
           'swisstopo (2026), DuckDB Foundation (2026)')
 
 
@@ -290,35 +290,6 @@ def main():
         '• Mehr Kantone: nur die Haltestellenliste erweitern, Code und Schema bleiben gleich.\n'
         '• Grenze: DuckDB erlaubt nur einen schreibenden Prozess; für Teil 2 ist PostgreSQL die nächste Stufe.',
         18, space=10)
-
-    # Anhang: moegliche Fragen (nicht Teil der fuenf Minuten)
-    fragen = [
-        [('Warum nicht PostgreSQL?',
-          'Für Teil 1 brauchen wir Analyse, keinen Mehrbenutzerbetrieb. DuckDB ist schneller '
-          'aufgesetzt und spaltenorientiert; das Schema ist Standard-SQL, ein Wechsel ist einfach.'),
-         ('Was heisst idempotent bei euch?',
-          'Jeder Tag wird in einer Transaktion gelöscht und neu eingefügt. Ein zweiter Lauf '
-          'überspringt fertige Tage. Geprüft: zweiter Lauf, 90 Tage übersprungen.'),
-         ('Wie geht ihr mit der Sommerzeit um?',
-          'Rohzeiten sind Lokalzeit. Wir wandeln sie mit Europe/Zurich in TIMESTAMPTZ um, '
-          'so stimmen Dauern über die Umstellung am 29.3.')],
-        [('Wie zuverlässig sind die Ist-Zeiten?',
-          'Ankunft gemessen: Bahn 89,7 %, Bus 65,9 %. Der Rest sind Prognosen, Schätzungen oder Halte '
-          'mit leerem oder unbekanntem Status (z. B. ohne Ankunft am Startort). '
-          'Der Status ist pro Zeit gespeichert, Paket C nimmt nur gemessene Werte.'),
-         ('Wie habt ihr die Haltestellen den Kantonen zugeordnet?',
-          'Koordinaten aus dem GTFS-Fahrplan, dann Punkt-in-Polygon mit den Kantonsgrenzen '
-          'von swisstopo. Ergebnis: 2587 Haltestellen.'),
-         ('Warum liegen die Rohdaten nicht im Repo?',
-          'Rund 50 GB ungefiltert. Im Repo liegt ein Beispieltag, das Skript lädt alles mit '
-          'einem Befehl nach. Die gefilterten Daten liegen als Parquet auf OneDrive.')]]
-    for k, block in enumerate(fragen):
-        s = base(prs, f'Paket B: mögliche Fragen {k + 1}/2 (Anhang)', 7 + k,
-                 'Anhang, nicht Teil der fünf Minuten. Nur zeigen, falls gefragt.')
-        for i, (frage, antwort) in enumerate(block):
-            y = 1.35 + i * 1.85
-            text(s, .55, y, 12.2, .5, frage, 20, GREEN, True)
-            text(s, .55, y + .55, 12.2, 1.2, antwort, 17)
 
     target = out_dir() / 'folien_paket_b.pptx'
     prs.save(target)

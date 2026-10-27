@@ -55,6 +55,7 @@ ein gefilterter Beispieltag unter `data/sample/2026-01-15_IstDaten_ostschweiz.cs
 Die gefilterten Ist-Daten (90 Tage, Ostschweiz, Parquet, 305 MB) liegen auf OneDrive (nur mit ZHAW-Konto):
 [oev-wetter-daten](https://zhaw-my.sharepoint.com/:f:/g/personal/kermoala_students_zhaw_ch/IgDMrlyl0G0qQqezxXcxQNQiAQnjVM4nKlivkW6XdSoz_R8?e=VZaW7q)
 Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
+Im selben Ordner liegt das Datenpaket von Paket C, `paket_c_daten.zip` (148 MB): Wetter- und Höhenrohdaten, Stammdaten sowie die bereinigten Ergebnisse `analyse_halt.parquet` und `analyse_stunde.parquet`. Aufbau und Nachbau: `LIESMICH_PAKET_C.txt` im Archiv.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
 ## Wetter, Transformation und Analyse (Paket C)
@@ -109,9 +110,8 @@ Der PDF-Export stammt aus PowerPoint.
 Das Datenpaket `data/processed/paket_c_daten.zip` ist für die externe Übergabe fertig.
 Es enthält die vollständigen Wetter-/Höhenquellen und bereinigten Ergebnisse, aber
 nicht erneut Bs bereits separat bereitgestellte Ist-Daten. Archiv in die Projektwurzel
-entpacken; die enthaltene LIESMICH erläutert die Struktur. **Der Upload von C und ein
-bestätigter Download-Link stehen noch aus.** Einen Link erst nach erfolgreichem Upload
-und Zugriffstest ergänzen. Lokale Dateipfade ersetzen den externen Datenzugriff nicht.
+entpacken; die enthaltene LIESMICH erläutert die Struktur. Das Archiv liegt im OneDrive-Ordner
+`oev-wetter-daten` (Link im Abschnitt «Rohdaten», nur mit ZHAW-Konto).
 
 - Wetterquelle und Vergleich: `docs/quellenprofil_wetter.md`.
 - Bereinigung, Zuordnung und Definitionen: `docs/transformation.md`.
@@ -125,10 +125,8 @@ Stand der Auswertung: 11’626’929 Halte mit Wetterzuordnung. Bei starkem Nied
 liegt die mittlere Ankunftsverspätung um 0,221 Minuten höher. H2 (stärkerer Effekt
 beim Bus) wird nicht gestützt; H3 (stärker in der HVZ) zeigt die entgegengesetzte
 Richtung. Das sind Zusammenhänge im untersuchten Zeitraum, keine Kausaleffekte.
-Die neu erzeugten Roh- und Analysedaten müssen für die Abgabe zusätzlich extern
-bereitgestellt werden; der oben verlinkte OneDrive-Ordner enthält bislang Bs Übergabe.
-Das fertige lokale Datenpaket dafür liegt unter `data/processed/paket_c_daten.zip`
-(inklusive unveränderter Wetter-/Höhenquellen, bereinigter Parquet-Dateien und LIESMICH).
+Die Roh- und Analysedaten von Paket C liegen als `paket_c_daten.zip` im OneDrive-Ordner
+`oev-wetter-daten` (unveränderte Wetter-/Höhenquellen, bereinigte Parquet-Dateien und LIESMICH).
 
 ## Quellen
 Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.

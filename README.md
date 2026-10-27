@@ -141,7 +141,7 @@ Die Roh- und Analysedaten von Paket C liegen als `paket_c_daten.zip` im OneDrive
 Gesamtpräsentation der Gruppe: `docs/präsentation/praesentation_gruppe4_teil1.pptx` (mit Sprechernotizen)
 und `docs/präsentation/praesentation_gruppe4_teil1.pdf`. Ablauf: Paket A (Timon, Folien 1–6),
 Paket B (Aladin, Folien 7–12), Paket C (Enis, Folien 13–17), Ausblick (Folie 18), danach Anhang
-mit Quellen und möglichen Fragen. Je ca. 5 Minuten pro Person, danach 7 Minuten Diskussion.
+mit den Quellen. Hintergrundbilder: `src/build_design.py`.
 Die Einzelfolien liegen daneben (`folien_paket_a/b/c`). Neu erzeugen:
 
 ```bash
@@ -149,6 +149,7 @@ pip install python-pptx
 python src/build_folien_paket_a.py
 python src/build_folien_paket_b.py
 python src/build_folien.py
+python src/build_design.py
 python src/build_praesentation.py
 ```
 

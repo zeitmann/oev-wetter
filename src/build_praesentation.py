@@ -3,9 +3,12 @@
 Liest die drei Foliensaetze in docs/praesentation/ und fuegt sie in der
 Reihenfolge des Referats zusammen (A ca. 5 Min., B ca. 5 Min., C ca. 5 Min.,
 danach Ausblick und Anhang). Folien, Bilder, Links und Sprechernotizen werden
-unveraendert uebernommen, nur die Seitenzahlen werden neu gesetzt.
+unveraendert uebernommen. Neu gesetzt werden die Seitenzahlen und das Design:
+Hintergrundbild zum Thema (Wolken, Schnee, Zug und Bus, src/build_design.py)
+statt des schlichten weissen Hintergrunds mit Balken.
 Die Einzelfolien zuerst erzeugen (src/build_folien_paket_a.py,
-src/build_folien_paket_b.py, src/build_folien.py), dann dieses Skript:
+src/build_folien_paket_b.py, src/build_folien.py, src/build_design.py),
+dann dieses Skript:
 
     python src/build_praesentation.py
 
@@ -27,7 +30,7 @@ ABLAUF = (
     + [('b', n) for n in range(1, 7)]    # Quelle, Ingestion, Filter, Storage, Datenmodell, Skalierung
     + [('c', n) for n in range(1, 6)]    # Wetter, Bereinigung, H1/H2, H3, Limitationen
     + [('a', 7)]                         # Ausblick Teil 2, Überleitung zur Diskussion
-    + [('a', 8), ('c', 6), ('b', 7), ('b', 8)]  # Anhang: Quellen und mögliche Fragen
+    + [('a', 8), ('c', 6)]               # Anhang: Quellen
 )
 DATEIEN = {'a': 'folien_paket_a.pptx', 'b': 'folien_paket_b.pptx', 'c': 'folien_paket_c.pptx'}
 RID_ATTRS = ('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}embed',
@@ -87,6 +90,26 @@ def set_page_number(slide, number):
             shape.text_frame.paragraphs[0].runs[0].text = str(number)
 
 
+def apply_design(slide, image, prs, titel=False):
+    """Hintergrundbild hinter alle Formen legen und den gruenen Balken oben entfernen.
+
+    Auf der Titelfolie entfallen zusaetzlich Fusszeile und Seitenzahl, weil dort
+    die Illustration (Strasse, Bus) den unteren Rand fuellt.
+    """
+    for shape in list(slide.shapes):
+        if titel and shape.top >= Inches(7.0):
+            shape._element.getparent().remove(shape._element)
+            continue
+        # Balken der Einzelfolien: Rechteck oben links ueber die ganze Breite, 0.12 Zoll hoch
+        if (shape.left == 0 and shape.top == 0 and shape.width == prs.slide_width
+                and shape.height == Inches(.12)):
+            shape._element.getparent().remove(shape._element)
+    picture = slide.shapes.add_picture(str(image), 0, 0, prs.slide_width, prs.slide_height)
+    tree = slide.shapes._spTree
+    tree.remove(picture._element)
+    tree.insert(2, picture._element)   # nach nvGrpSpPr und grpSpPr = ganz hinten
+
+
 def main():
     folder = out_dir()
     quellen = {key: Presentation(str(folder / name)) for key, name in DATEIEN.items()}
@@ -96,9 +119,12 @@ def main():
     prs.core_properties.author = 'Timon, Aladin, Enis · Gruppe 4'
     prs.core_properties.subject = 'Projektarbeit Teil 1, Data Engineering HS26'
 
+    design = folder / 'design'
     for number, (key, index) in enumerate(ABLAUF, start=1):
         slide = copy_slide(quellen[key].slides[index - 1], prs)
         set_page_number(slide, number)
+        image = 'hintergrund_titel.png' if number == 1 else 'hintergrund_inhalt.png'
+        apply_design(slide, design / image, prs, titel=number == 1)
 
     target = folder / 'praesentation_gruppe4_teil1.pptx'
     prs.save(target)

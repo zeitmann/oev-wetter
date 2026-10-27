@@ -59,7 +59,7 @@ def base(prs, title, index, notes):
     bar.line.fill.background()
     text(slide, .5, .35, 12.3, .6, title, 30, bold=True)
     text(slide, .5, 7.08, 11.9, .3,
-         'Gruppe 4 · Enis · Paket C · 27.10.2026 | Quellen: MeteoSchweiz (2026), SBB/SKI (2026), swisstopo (2026)',
+         'Gruppe 4 · Enis · Paket C | Quellen: MeteoSchweiz (2026), SBB/SKI (2026), swisstopo (2026)',
          10, GREY)
     text(slide, 12.4, 7.06, .5, .3, str(index), 11, GREY)
     slide.notes_slide.notes_text_frame.text = notes

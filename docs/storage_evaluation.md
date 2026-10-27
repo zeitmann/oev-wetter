@@ -1,12 +1,12 @@
 # Storage-Evaluation (Paket B, AP 4)
 
-Stand: 20.10.2026, Entwurf. Entscheid und Begruendung fliessen in Lifecycle-Diagramm (Paket A) und Folien.
+Stand: 27.10.2026. Entscheid und Begruendung sind in Lifecycle-Diagramm (Paket A, `docs/lifecycle.md`) und Folien uebernommen.
 
 ## Anforderungen aus den geplanten Abfragen
 
 - Join ueber Zeit und Ort: jeder Halt (Haltestelle, Zeitpunkt) wird der naechsten Wetterstation und der passenden Stunde zugeordnet.
 - Aggregationen pro Stunde, Linie, Verkehrsmittel, Kanton und Tageszeit (H1 bis H3).
-- Datenmenge: gefiltert auf Ostschweiz, Bahn und Bus geschaetzt einige Millionen Halte fuer 90 Tage (wird nach dem ersten Tag gemessen); ungefiltert 35 bis 55 GB.
+- Datenmenge: gefiltert auf Ostschweiz, Bahn und Bus gemessen 17.07 Mio. Halte fuer 90 Tage; ungefiltert 35 bis 55 GB.
 - Wiederholbarkeit: alle in der Gruppe muessen die Datenbank lokal mit einem Befehl nachbauen koennen.
 - Teil 2: das Web-Dashboard liest aggregierte Werte (Karte, Zeitreihen, Wetterfilter).
 
@@ -23,7 +23,7 @@ Stand: 20.10.2026, Entwurf. Entscheid und Begruendung fliessen in Lifecycle-Diag
 | Mehrbenutzerbetrieb / Dashboard Teil 2 | maessig (ein Schreiber) | maessig | sehr gut | gut |
 | Teamkenntnisse | SQL bekannt | SQL bekannt | SQL bekannt | wenig |
 
-## Entscheid (Vorschlag)
+## Entscheid
 
 **DuckDB** als Datenbank fuer Teil 1. Gruende: Die Fragestellung ist analytisch (Aggregationen und Joins ueber viele Zeilen), die Ist-Daten kommen als grosse CSV-Dateien, die DuckDB streamend und gefiltert einlesen kann, und die ganze Datenbank ist eine Datei ohne Server, also fuer alle in der Gruppe sofort nachbaubar. TIMESTAMPTZ deckt die Anforderung ISO 8601 mit Zeitzone ab.
 

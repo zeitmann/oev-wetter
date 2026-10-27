@@ -128,6 +128,22 @@ Richtung. Das sind Zusammenhänge im untersuchten Zeitraum, keine Kausaleffekte.
 Die Roh- und Analysedaten von Paket C liegen als `paket_c_daten.zip` im OneDrive-Ordner
 `oev-wetter-daten` (unveränderte Wetter-/Höhenquellen, bereinigte Parquet-Dateien und LIESMICH).
 
+## Präsentation Kolloquium (Teil 1)
+
+Gesamtpräsentation der Gruppe: `docs/präsentation/praesentation_gruppe4_teil1.pptx` (mit Sprechernotizen)
+und `docs/präsentation/praesentation_gruppe4_teil1.pdf`. Ablauf: Paket A (Timon, Folien 1–6),
+Paket B (Aladin, Folien 7–12), Paket C (Enis, Folien 13–17), Ausblick (Folie 18), danach Anhang
+mit Quellen und möglichen Fragen. Je ca. 5 Minuten pro Person, danach 7 Minuten Diskussion.
+Die Einzelfolien liegen daneben (`folien_paket_a/b/c`). Neu erzeugen:
+
+```bash
+pip install python-pptx
+python src/build_folien_paket_a.py
+python src/build_folien_paket_b.py
+python src/build_folien.py
+python src/build_praesentation.py
+```
+
 ## Quellen
 Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.
 

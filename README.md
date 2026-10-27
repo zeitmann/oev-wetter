@@ -16,7 +16,7 @@ Lifecycle-Entwurf (Phasen, Unterströmungen, Serving): `docs/lifecycle.md`.
 
 | Hypothese | Aussage |
 | --- | --- |
-| H1 | Bei starkem Niederschlag oder Schnee ist die mittlere Verspätung höher als sonst. |
+| H1 | Bei starkem Niederschlag ist die mittlere Verspätung höher als sonst. |
 | H2 | Der Effekt ist beim Bus stärker als bei der Bahn. |
 | H3 | Der Effekt ist in der Hauptverkehrszeit stärker als ausserhalb. |
 

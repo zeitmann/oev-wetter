@@ -22,7 +22,7 @@ Nutzen des Ergebnisses:
 
 | Nr. | Hypothese |
 | --- | --- |
-| H1 | Bei starkem Niederschlag oder Schnee ist die mittlere Verspätung höher als sonst. |
+| H1 | Bei starkem Niederschlag ist die mittlere Verspätung höher als sonst. |
 | H2 | Der Effekt von H1 ist beim Bus stärker als bei der Bahn. |
 | H3 | Der Effekt von H1 ist in der Hauptverkehrszeit stärker als ausserhalb. |
 

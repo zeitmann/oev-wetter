@@ -69,6 +69,12 @@ zu unterscheiden. Die Daten belegen keine Kausalität.
   und Distanzgrenzen verbessern die Zuordnung, ersetzen keine Messung vor Ort.
 - 47 Haltestellen ohne geeignete Station; stationäre Niederschlags-/Temperaturparameter
   fehlen bei drei der 13 Stationen vollständig. Keine automatische Auffüllung.
+  Die 47 Haltestellen liegen alle auf rund 1000 m ü. M. oder höher, also gerade dort,
+  wo Schnee am meisten Einfluss haben dürfte. Der Schnee-Effekt kann dadurch unterschätzt sein.
+- Ausgefallene Fahrten können selbst wetterbedingt sein. Weil sie ausgeschlossen sind,
+  wird der Wettereffekt eher unterschätzt. Für Teil 2: Ausfallquote nach Wetterlage auswerten.
+- H2 ist absolut nicht gestützt (Bus und Bahn je ca. +0,21 Min.). Relativ steigt der Anteil
+  verspäteter Halte bei der Bahn stärker (5,5 → 8,0 %, +45 %) als beim Bus (13,4 → 16,5 %, +23 %).
 - Schneeindikatoren unterscheiden sich nach Station; Schneehöhe ist kein Schneefall.
 - Baustellen, Störungen, Nachfrage, lokale Wetterlagen und Schulferien werden nicht
   kontrolliert. Kommunale Feiertage und zusätzliche betriebliche Ruhetage fehlen.

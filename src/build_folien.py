@@ -59,7 +59,7 @@ def base(prs, title, index, notes):
     bar.line.fill.background()
     text(slide, .5, .35, 12.3, .6, title, 30, bold=True)
     text(slide, .5, 7.08, 11.9, .3,
-         'Gruppe 4 · Enis · Paket C · 26.10.2026 | Quellen: MeteoSchweiz (2026), SBB/SKI (2026), swisstopo (2026)',
+         'Gruppe 4 · Enis · Paket C · 27.10.2026 | Quellen: MeteoSchweiz (2026), SBB/SKI (2026), swisstopo (2026)',
          10, GREY)
     text(slide, 12.4, 7.06, .5, .3, str(index), 11, GREY)
     slide.notes_slide.notes_text_frame.text = notes
@@ -119,16 +119,20 @@ def main():
         'Rang-biserial r=0,070, p<0,001: kleiner Zusammenhang. '
         'Die Grafik zeigt drei Wetterklassen, der Test vergleicht stark gegen trocken und mässig zusammen. '
         'H2: Bus +0,212 und Bahn +0,214 Minuten. Interaktion −0,0017 Minuten, '
-        '95%-KI [−0,0299; 0,0264], p=0,904. H2 wird nicht gestützt.')
+        '95%-KI [−0,0299; 0,0264], p=0,904. H2 wird absolut nicht gestützt. Relativ ist es eher umgekehrt: '
+        'Der Anteil verspäteter Halte steigt bei der Bahn von 5,5 auf 8,0 % (+45 %), beim Bus von 13,4 auf '
+        '16,5 % (+23 %), und r ist bei der Bahn grösser (0,103 statt 0,063). Die Mittelwerte steigen '
+        'abgestuft von trocken über mässig zu stark, das stützt H1 zusätzlich.')
     text(s, .55, 1.3, 12.2, .75,
         f'+{h1.differenz_min*60:.1f} Sekunden im Mittel · {h1.verspaetet_sonst_anteil*100:.2f} % → '
         f'{h1.verspaetet_wetter_anteil*100:.2f} % verspätete Halte'.replace('.', ','), 27, GREEN, True)
     s.shapes.add_picture(str(OUT / 'wetter_verkehrsmittel.png'), Inches(.5), Inches(2.45), width=Inches(8.8))
     text(s, 9.55, 2.4, 3.25, 3.8,
-        f'Stark: > {params["niederschlag_q90_mm"]:.1f} mm/h\n'
+        f'Stark: > {params["niederschlag_q90_mm"]:.1f} mm/h\n'.replace('.', ',') +
         'Kleiner Effekt: r = 0,070\np < 0,001\n'
-        'H2 nicht gestützt:\nFast gleicher Wettereffekt bei Bus und Bahn', 20)
-    text(s, .55, 6.45, 12, .35, 'H1-Test: stark gegen sonst. Grafik: trocken / mässig / stark.', 15, GREY)
+        'H2 nicht gestützt: absolut gleicher Effekt (+0,21 Min.), relativ bei der Bahn eher stärker', 18)
+    text(s, .55, 6.45, 12, .35, 'Abgestuft trocken → mässig → stark: Bus 1,45 → 1,61 → 1,69 Min. · Bahn 0,83 → 1,04 → 1,07 Min. '
+         '(H1-Test: stark gegen sonst)', 15, GREY)
 
     s = base(prs, 'H3: Die Hauptverkehrszeit verstärkt den Effekt nicht', 4,
         'Ca. 60 Sekunden. HVZ Montag bis Freitag, 6 bis 9 und 16 bis 19 Uhr lokal, '
@@ -137,11 +141,12 @@ def main():
         'Verstärkung des Wettereffekts: HVZ +0,208 gegenüber NVZ +0,268 Minuten. '
         'OLS-Interaktion −0,0603 Minuten, 95%-KI [−0,0816; −0,0389], p<0,001. '
         'Die Richtung ist umgekehrt, die Differenz etwa 3,6 Sekunden. '
-        'Die Regression nutzt alle bereinigten Halte, ohne Stichprobe.')
+        'Die Regression nutzt alle bereinigten Halte, ohne Stichprobe. Relativ: Anteil verspäteter Halte '
+        'HVZ 19,2 → 22,9 % (+20 %), NVZ 9,5 → 13,1 % (+38 %).')
     s.shapes.add_picture(str(OUT / 'wetter_hvz.png'), Inches(.55), Inches(1.4), width=Inches(8.35))
     text(s, 9.15, 1.65, 3.6, 3.8,
         'Wettereffekt stark vs. sonst:\nHVZ: +0,208 Minuten\nNVZ: +0,268 Minuten\n'
-        f'Interaktion: {reg.loc["H3", "interaktion_min"]:.3f} Minuten\nH3 nicht gestützt', 22)
+        f'Interaktion: {reg.loc["H3", "interaktion_min"]:.3f} Minuten\nH3 nicht gestützt'.replace('.', ','), 22)
     text(s, .55, 6.4, 12, .4, 'Höheres Verspätungsniveau in der HVZ ≠ stärkerer Wettereffekt.', 21, GREEN, True)
 
     s = base(prs, 'Ein kleiner Zusammenhang – mit klaren Grenzen', 5,
@@ -152,15 +157,20 @@ def main():
         'p-Werte und Konfidenzintervalle können zu optimistisch sein. '
         'Schnee ergänzend nur +0,029 Minuten, r=0,014. Je nach Station wird Schneedecke '
         'oder Niederschlag bei Frost beobachtet, kein einheitlicher Schneefall. '
+        'Die 47 Haltestellen ohne geeignete Station liegen alle auf rund 1000 m oder höher, also dort, '
+        'wo Schnee am wichtigsten wäre. Ausgefallene Fahrten können wetterbedingt sein; weil sie '
+        'ausgeschlossen sind, wird der Effekt eher unterschätzt (Ausfallquote nach Wetter für Teil 2). '
         'Die bereinigten Halte und eine Stundenaggregation stehen für Teil 2 bereit.')
     text(s, .55, 1.4, 5.9, 3.7,
         'Beobachteter Zusammenhang, keine Kausalität\n'
         'Nur ein Winterquartal; weitere Ursachen fehlen\n'
-        'Halte derselben Fahrt sind nicht unabhängig', 24)
+        'Halte derselben Fahrt sind nicht unabhängig\n'
+        'Ausfälle ausgeschlossen: Effekt eher unterschätzt', 21)
     text(s, 7, 1.4, 5.75, 3.7,
         'Wetterstation liegt nicht direkt am Halt\n'
         'Unterschiedliche REAL-Abdeckung bei Bahn und Bus\n'
-        'Schneedecke und Frostniederschlag sind keine einheitliche Schneefallmessung', 24)
+        'Schneedecke und Frostniederschlag sind keine einheitliche Schneefallmessung\n'
+        '47 Haltestellen ab ca. 1000 m ohne Station, gerade dort zählt Schnee', 21)
     text(s, .55, 5.8, 12, .9,
         'Für Teil 2 vorbereitet: bereinigte Halte + Stundenaggregation\n'
         'Nachvollziehbar in ausgeführten Notebooks und DuckDB/Parquet.', 23, GREEN, True)

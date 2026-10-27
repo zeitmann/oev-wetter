@@ -100,8 +100,8 @@ Paketversionen stehen unter `docs/ergebnisse/umgebung.txt`.
 
 ### Präsentation und Datenübergabe
 
-Fertige Folien für C: `docs/folien_paket_c.pptx` mit Sprechernotizen und
-`docs/folien_paket_c.pdf`. Fünf Vortragsfolien für etwa fünf Minuten, dazu eine
+Fertige Folien für C: `docs/präsentation/folien_paket_c.pptx` mit Sprechernotizen und
+`docs/präsentation/folien_paket_c.pdf`. Fünf Vortragsfolien für etwa fünf Minuten, dazu eine
 Quellenfolie im Anhang. Sie können in die gemeinsame Präsentation übernommen werden.
 Optional neu erzeugen: `pip install python-pptx` und `python src/build_folien.py`.
 Der PDF-Export stammt aus PowerPoint.

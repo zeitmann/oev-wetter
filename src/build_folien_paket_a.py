@@ -140,13 +140,13 @@ def main():
         'Ca. 60 Sekunden. Forschungsfrage vorlesen, dann die drei Hypothesen. H1 fragt, ob es einen '
         'Effekt gibt, H2 und H3 fragen, ob er je nach Verkehrsmittel und Tageszeit unterschiedlich '
         'stark ist. Zu H1: Der Test vergleicht starken Niederschlag mit allen übrigen Stunden. '
-        'Schnee wird ergänzend nach demselben Vorgehen ausgewertet (Schneedecke oder Niederschlag '
+        'Schnee ist keine eigene Hypothese, er wird ergänzend nach demselben Vorgehen ausgewertet (Schneedecke oder Niederschlag '
         'bei Frost), weil SwissMetNet keinen einheitlichen Schneefall misst.')
     text(s, .55, 1.3, 12.2, 1.4,
         'Wie stark beeinflusst das Wetter die Pünktlichkeit des öffentlichen Verkehrs in der '
         'Ostschweiz, und unterscheidet sich der Effekt nach Verkehrsmittel und Tageszeit?',
         24, GREEN, True, italic=True)
-    hyp = [('H1', 'Bei starkem Niederschlag oder Schnee ist die mittlere Verspätung höher als sonst.'),
+    hyp = [('H1', 'Bei starkem Niederschlag ist die mittlere Verspätung höher als sonst.'),
            ('H2', 'Der Effekt ist beim Bus stärker als bei der Bahn.'),
            ('H3', 'Der Effekt ist in der Hauptverkehrszeit stärker als ausserhalb.')]
     for i, (nr, body) in enumerate(hyp):
@@ -155,7 +155,7 @@ def main():
         text(s, .8, y + .25, 1.1, .6, nr, 30, GREEN, True)
         text(s, 2.0, y + .18, 10.5, .8, body, 20)
     text(s, .55, 6.62, 12.2, .4,
-        'H1 wird mit starkem Niederschlag getestet; Schnee/Frost läuft als ergänzende Variable mit.',
+        'Ergänzend: Schnee/Frost (Schneedecke oder Niederschlag bei Frost), gleiches Vorgehen wie H1.',
         14, GREY)
 
     # 5 Operationalisierung und Methodik

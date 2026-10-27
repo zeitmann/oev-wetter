@@ -20,6 +20,8 @@ Lifecycle-Entwurf (Phasen, Unterströmungen, Serving): `docs/lifecycle.md`.
 | H2 | Der Effekt ist beim Bus stärker als bei der Bahn. |
 | H3 | Der Effekt ist in der Hauptverkehrszeit stärker als ausserhalb. |
 
+H1 wird mit starkem Niederschlag getestet, Schnee/Frost (Schneedecke oder Niederschlag bei Frost) läuft als ergänzende Variable mit.
+
 Festlegungen: Verspätung = Ankunftsverspätung pro Halt in Minuten, verspätet ab 3 Minuten (nach SBB AG, o. J.), nur gemessene Werte im Fenster −10 bis +60 Minuten; starker Niederschlag = Stundensumme über dem 90. Perzentil der Niederschlagsstunden; Hauptverkehrszeit = Mo–Fr 6–9 und 16–19 Uhr. Tests: Mann-Whitney-U (H1), Regression mit Wechselwirkung (H2, H3), α = 0,05, immer mit Effektstärke.
 
 ## Skalierung (Ausblick)
@@ -58,6 +60,13 @@ Anleitung zum Einlesen in DuckDB: `LIESMICH.md` im Ordner.
 Im selben Ordner liegt das Datenpaket von Paket C, `paket_c_daten.zip` (148 MB): Wetter- und Höhenrohdaten, Stammdaten sowie die bereinigten Ergebnisse `analyse_halt.parquet` und `analyse_stunde.parquet`. Aufbau und Nachbau: `LIESMICH_PAKET_C.txt` im Archiv.
 Im Repo liegt nur ein Sample unter `data/sample/`.
 
+Die vollständigen, ungefilterten Rohdaten sind öffentlich und ohne Login verfügbar:
+- Ist-Daten v2 (Monatsarchive, ganze Schweiz): https://archive.opentransportdata.swiss/actual_data_archive.htm.
+  `src/ingest_istdaten.py` lädt sie selbst herunter (siehe Abschnitt Setup Datenbank).
+- Wetter (MeteoSchweiz SwissMetNet): https://data.geo.admin.ch/api/stac/v1/collections/ch.meteoschweiz.ogd-smn.
+  `src/ingest_wetter.py` lädt sie selbst herunter.
+- Fahrplan GTFS und swissBOUNDARIES3D für die Haltestellenliste: siehe Abschnitt Quellen.
+
 ## Wetter, Transformation und Analyse (Paket C)
 
 Vorhandene Übergabe von B verwenden: `halt.zip` nach `data/raw/paket-b-daten/`
@@ -74,8 +83,7 @@ python src/analyse.py
 python -m unittest discover -s tests -v
 ```
 
-Auf dieser Windows-Installation liegt Python lokal unter `.venv/python.exe`;
-damit kann `python` in den Befehlen ersetzt werden. Die Umgebung wird nicht versioniert.
+Eine virtuelle Umgebung (z. B. `.venv/`) wird nicht versioniert.
 Die Skripte sind wiederholbar: B-Tabellen werden übersprungen, Wetterdaten anhand
 ihres Schlüssels ersetzt und Analyseergebnisse neu aufgebaut. `--force` lädt die
 jeweilige Quelle neu. Für Wetter und Höhen ist beim ersten Lauf Internet nötig.
@@ -127,6 +135,22 @@ beim Bus) wird nicht gestützt; H3 (stärker in der HVZ) zeigt die entgegengeset
 Richtung. Das sind Zusammenhänge im untersuchten Zeitraum, keine Kausaleffekte.
 Die Roh- und Analysedaten von Paket C liegen als `paket_c_daten.zip` im OneDrive-Ordner
 `oev-wetter-daten` (unveränderte Wetter-/Höhenquellen, bereinigte Parquet-Dateien und LIESMICH).
+
+## Präsentation Kolloquium (Teil 1)
+
+Gesamtpräsentation der Gruppe: `docs/präsentation/praesentation_gruppe4_teil1.pptx` (mit Sprechernotizen)
+und `docs/präsentation/praesentation_gruppe4_teil1.pdf`. Ablauf: Paket A (Timon, Folien 1–6),
+Paket B (Aladin, Folien 7–12), Paket C (Enis, Folien 13–17), Ausblick (Folie 18), danach Anhang
+mit Quellen und möglichen Fragen. Je ca. 5 Minuten pro Person, danach 7 Minuten Diskussion.
+Die Einzelfolien liegen daneben (`folien_paket_a/b/c`). Neu erzeugen:
+
+```bash
+pip install python-pptx
+python src/build_folien_paket_a.py
+python src/build_folien_paket_b.py
+python src/build_folien.py
+python src/build_praesentation.py
+```
 
 ## Quellen
 Zitierstandard: APA 7 (SML-Zitierleitfaden). Weitere Quellen und Code-Vorlagen stehen als Kommentar am Anfang der jeweiligen Datei.

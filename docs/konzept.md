@@ -33,7 +33,7 @@ Nutzen des Ergebnisses:
 | Verspätung | Ankunftsverspätung pro Halt = Ist-Ankunft minus Soll-Ankunft in Minuten. Es zählen nur Halte mit Ankunft und gemessenem Ist-Wert (`an_status = 'REAL'`, nicht geschätzt oder prognostiziert). Ausgefallene Fahrten (`faellt_aus`) und Durchfahrten werden ausgeschlossen. Plausibilitätsfenster: −10 bis +60 Minuten. Werte ausserhalb (z. B. um einen Tag verschobene Ist-Zeiten) werden entfernt, ihre Anzahl wird in der EDA dokumentiert. Der Anteil gemessener Werte wird in der EDA geprüft und dokumentiert. |
 | Verspätet (binär) | Verspätung ≥ 3 Minuten. Schwelle nach SBB AG (o. J.): Ein Zug gilt als pünktlich, wenn er mit weniger als 3 Minuten Verspätung eintrifft. Die SBB zählt ausgefallene Züge als unpünktlich; hier werden sie ausgeschlossen. Die Definition gilt bei der SBB für Züge und wird auf Busse übertragen. |
 | Starker Niederschlag | Stundensumme über dem 90. Perzentil aller Stunden mit Niederschlag > 0 mm. Das Quantil wird einmal über den gesamten Zeitraum und alle Stationen berechnet und im Notebook ausgewiesen. |
-| Schnee / Frost | Zusätzliche Variable: Niederschlag > 0 mm und Temperatur < 0 °C. Liefert eine Station einen Schneeparameter, hat dieser Vorrang. |
+| Schnee / Frost | Zusätzliche Variable: Niederschlag > 0 mm und Temperatur < 0 °C. Liefert eine Station einen Schneeparameter, hat dieser Vorrang. Umgesetzt ist dies mit der Schneehöhe (Schneedecke > 0 cm), nicht mit aktuellem Schneefall, weil SwissMetNet keinen einheitlichen Schneefallparameter liefert (siehe `docs/transformation.md`). |
 | Hauptverkehrszeit (HVZ) | Montag bis Freitag, 6–9 Uhr und 16–19 Uhr Lokalzeit, Feiertage ausgenommen. Alles andere gilt als Nebenverkehrszeit. |
 | Verkehrsmittel | Bahn und Bus, wie in den Ist-Daten klassifiziert. |
 | Zeitzone | Lokalzeit mit Zeitzone (ISO 8601). Die Sommerzeitumstellung am 29.3.2026 liegt im Zeitraum und wird in der Bereinigung berücksichtigt. |
@@ -50,7 +50,7 @@ Verspätungen sind rechtsschief und enthalten viele Nullen. Deshalb kommen rangb
 
 Weitere Festlegungen:
 
-- Schnee/Frost wird im selben Vorgehen wie H1 als zusätzliche Variable ausgewertet, nicht als eigene Hypothese.
+- Schnee/Frost wird im selben Vorgehen wie H1 als zusätzliche Variable ausgewertet, nicht als eigene Hypothese. Der Hypothesentest zu H1 selbst vergleicht starken Niederschlag mit allen übrigen Stunden.
 - Die Auswertung erfolgt auf Halt-Ebene. Die Abhängigkeit von Halten derselben Fahrt oder Linie wird als Limitation genannt. Falls Zeit bleibt, prüft Paket C eine Aggregation pro Stunde und Linie als Kontrolle.
 
 ## 6. Limitationen

@@ -139,7 +139,9 @@ def main():
     s = base(prs, 'Forschungsfrage und Hypothesen', 4,
         'Ca. 60 Sekunden. Forschungsfrage vorlesen, dann die drei Hypothesen. H1 fragt, ob es einen '
         'Effekt gibt, H2 und H3 fragen, ob er je nach Verkehrsmittel und Tageszeit unterschiedlich '
-        'stark ist.')
+        'stark ist. Zu H1: Der Test vergleicht starken Niederschlag mit allen übrigen Stunden. '
+        'Schnee wird ergänzend nach demselben Vorgehen ausgewertet (Schneedecke oder Niederschlag '
+        'bei Frost), weil SwissMetNet keinen einheitlichen Schneefall misst.')
     text(s, .55, 1.3, 12.2, 1.4,
         'Wie stark beeinflusst das Wetter die Pünktlichkeit des öffentlichen Verkehrs in der '
         'Ostschweiz, und unterscheidet sich der Effekt nach Verkehrsmittel und Tageszeit?',
@@ -152,6 +154,9 @@ def main():
         card(s, .55, y, 12.2, 1.1, fill=LIGHT, line=None)
         text(s, .8, y + .25, 1.1, .6, nr, 30, GREEN, True)
         text(s, 2.0, y + .18, 10.5, .8, body, 20)
+    text(s, .55, 6.62, 12.2, .4,
+        'H1 wird mit starkem Niederschlag getestet; Schnee/Frost läuft als ergänzende Variable mit.',
+        14, GREY)
 
     # 5 Operationalisierung und Methodik
     s = base(prs, 'Operationalisierung und Methodik', 5,

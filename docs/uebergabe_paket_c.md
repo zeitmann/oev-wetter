@@ -79,8 +79,8 @@ zu unterscheiden. Die Daten belegen keine Kausalität.
 - Verfahrensbeschreibung: `docs/transformation.md`; Spalten wie `src/schema.sql`.
 - Ausgeführte Notebooks: `notebooks/01_bereinigung_join.ipynb`, `02_hypothesen.ipynb`.
 - Grafiken und exakte Kennzahlen: `docs/ergebnisse/`.
-- Fertige Vortragsfolien: `docs/folien_paket_c.pptx` mit Sprechernotizen und
-  `docs/folien_paket_c.pdf` (fünf Vortragsfolien plus Quellenanhang).
+- Fertige Vortragsfolien: `docs/präsentation/folien_paket_c.pptx` mit Sprechernotizen und
+  `docs/präsentation/folien_paket_c.pdf` (fünf Vortragsfolien plus Quellenanhang).
 - Bereinigte Daten: DuckDB-Tabellen `analyse_halt`, `analyse_stunde`, zusätzlich
   `data/processed/analyse_halt.parquet` und `analyse_stunde.parquet` (nicht im Repo).
 - Nachbau: Befehle im README. Wetter-/Höhenrohdaten und abgeleitete Vollbestände

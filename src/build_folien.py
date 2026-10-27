@@ -7,6 +7,7 @@ Datenquellen und statistische Methoden: docs/quellenprofil_wetter.md und
 docs/transformation.md. Quelle Wetterdaten: MeteoSchweiz.
 """
 import json
+import unicodedata
 from pathlib import Path
 
 import pandas as pd
@@ -21,6 +22,16 @@ NAVY = '17364A'
 GREEN = '167D8D'
 GREY = '53616B'
 WHITE = 'FFFFFF'
+
+
+def folien_dir():
+    """Ordner docs/praesentation (Schreibweise des Umlauts im Dateisystem egal)."""
+    for p in (ROOT / 'docs').iterdir():
+        if unicodedata.normalize('NFC', p.name) == 'präsentation':
+            return p
+    p = ROOT / 'docs' / 'präsentation'
+    p.mkdir(parents=True, exist_ok=True)
+    return p
 
 
 def text(slide, x, y, w, h, value, size=20, color=NAVY, bold=False):
@@ -168,7 +179,7 @@ def main():
         box = text(s, .55, 1.35+i*1.28, 12.2, 1.1, reference+'\n'+url, 16)
         for run in box.text_frame.paragraphs[-1].runs:
             run.hyperlink.address = url
-    target = ROOT / 'docs/folien_paket_c.pptx'
+    target = folien_dir() / 'folien_paket_c.pptx'
     prs.save(target)
     print(f'{target.name}: {len(prs.slides)} Folien mit Sprechernotizen')
 
